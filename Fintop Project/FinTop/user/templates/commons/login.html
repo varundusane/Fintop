@@ -1,0 +1,67 @@
+{% extends 'layouts/home.html' %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+{% load static %}
+
+<!-- ======= Breadcrumbs ======= -->
+<section class="breadcrumbs">
+  <div class="container">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li>Login</li>
+    </ol>
+    <h2>Login</h2>
+  </div>
+</section><!-- End Breadcrumbs -->
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7 col-md-10 m-auto login-form">
+        <h1 class="mb-4 text-center">Login</h1>
+        <form method="post">
+          {% csrf_token %}
+
+          {% if messages %}
+            <div class="alert alert-danger">
+               <ul class="messages">
+                   {% for message in messages %}
+                       <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                   {% endfor %}
+               </ul>
+              </div>
+           {% endif %}
+
+          <div class="form-field form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter your username" autofocus required>
+          </div>
+
+          <div class="form-field form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" class="form-control" id="id_password" placeholder="Enter your password" required>
+          </div>
+
+          <div class="row pt-4">
+            <div class="col-6">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+                <label class="custom-control-label" for="remember">Remember me</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </div>
+          </div>
+        </form>
+        <p class="mt-4">
+          Don't have an account? <a href="{% url 'signup' %}" class="link-effect">Signup</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

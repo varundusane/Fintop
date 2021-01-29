@@ -1,0 +1,127 @@
+﻿{% extends 'layouts/home.html' %} {% block title %} Signup {% endblock title %} {% block content %} {% load static %}
+
+<!-- ======= Breadcrumbs ======= -->
+<section class="breadcrumbs">
+    <div class="container">
+        <ol>
+            <li><a href="/">Home</a></li>
+            <li>Signup</li>
+        </ol>
+        <h2>Signup</h2>
+    </div>
+</section>
+<!-- End Breadcrumbs -->
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 m-auto login-form">
+                <h1 class="mb-4 text-center">Signup</h1>
+                <form method="post">
+                    {% csrf_token %} {% if messages %}
+                    <div class="alert alert-danger">
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="form-field form-group">
+                        <label for="id_username">Username</label>
+                        <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter your username" autofocus required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="id_first_name">First Name</label>
+                        <input type="text" name="first_name" class="form-control" id="id_first_name" placeholder="Enter your first name" required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="id_last_name">Last Name</label>
+                        <input type="text" name="last_name" class="form-control" id="id_last_name" placeholder="Enter your last name" required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="id_phnumber">Phone Number</label>
+                        <input type="text" name="phnumber" class="form-control" id="id_phnumber" placeholder="Enter your Phone Number" required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="id_email">Email</label>
+                        <input type="email" name="email" class="form-control" id="id_email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="id_password1">Password</label>
+                        <input type="password" name="password1" class="form-control" id="id_password1" placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="form-field form-group">
+                        <label for="password2">Re-Enter Password</label>
+                        <input type="password" name="password2" class="form-control" id="password2" placeholder="Re-Enter your password" required>
+                    </div>
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="terms" name="terms">
+                        <label class="custom-control-label" for="terms">I Agree with <a href="#" data-toggle="modal" data-target="#exampleModal">Terms & Conditions</a></label>
+                    </div>
+
+                    <div class="pt-4 text-center">
+                        <button type="submit" class="btn btn-primary w-75">Submit</button>
+                    </div>
+
+                </form>
+                <p class="mt-4">
+                    Already have an account? <a href="{% url 'login' %}" class="link-effect">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-justify">
+                <h4 class="Sw0jjd text-center">What&rsquo;s covered in these terms</h4>
+                <h5 class="XwcIZc text-center" align="justify">We know it&rsquo;s tempting to skip these Terms of Service, but it&rsquo;s important to establish what you can expect from us as you use Google <a class="UADm2d" href="https://policies.google.com/terms?hl=en-IN&amp;fg=1#footnote-services"
+                        data-name="services">services</a>, and what we expect from you.</h5>
+                <hr>
+                <p>These Terms of Service reflect <a class="N6CPUe" href="https://about.google/intl/en-GB_IN/how-our-business-works" target="_blank">the way that Google&rsquo;s business works</a>, the laws that apply to our company, and <a class="N6CPUe"
+                        href="https://www.google.com/about/philosophy.html?hl=en_GB" target="_blank">certain things that we&rsquo;ve always believed to be true</a>. As a result, these Terms of Service help define Google&rsquo;s relationship with you as you
+                    interact with our services. For example, these terms include the following topic headings:</p>
+                <br>
+                <p><a href="https://policies.google.com/terms?hl=en-IN&amp;fg=1#toc-what-you-expect">What you can expect from us</a>, which describes how we provide and develop our services.</p>
+                <br>
+                <p><a href="https://policies.google.com/terms?hl=en-IN&amp;fg=1#toc-what-we-expect">What we expect from you</a>, which establishes certain rules for using our services.</p>
+                <br>
+                <p><a href="https://policies.google.com/terms?hl=en-IN&amp;fg=1#toc-content">Content in Google services</a>, which describes the intellectual property rights to the content that you find in our services &ndash; whether that content belongs
+                    to you, Google or others</p>
+                <br>
+                <p><a href="https://policies.google.com/terms?hl=en-IN&amp;fg=1#toc-problems">In case of problems or disagreements</a>, which describes other legal rights that you have, and what to expect in case someone violates these terms.</p>
+                <br>
+                <p align="justify">Understanding these terms is important because, by using our services, you&rsquo;re agreeing to these terms.</p>
+                <br>
+                <p align="justify">Besides these terms, we also publish a <a href="https://policies.google.com/privacy?hl=en-IN&amp;fg=1">Privacy Policy</a>. Although it&rsquo;s not part of these terms, we encourage you to read it to better understand how you can <a class="N6CPUe"
+                        href="https://myaccount.google.com/?hl=en_GB" target="_blank">update, manage, export and delete your information</a>.</p>
+                <hr>
+                <p class="text-center"><button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button></p>
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->
+
+{% endblock content %}
