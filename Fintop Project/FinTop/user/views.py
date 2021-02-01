@@ -5,11 +5,11 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import View, UpdateView
 from user.forms import SignUpForm, ProfileForm, BusinessForm, BankInfoForm, LoanForm, AdditionalAssetsForm, AdditionalLiabilitiesForm, ProfileForms, ContactForm
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -489,5 +489,6 @@ class contact(View):
             # email.encoding = 'utf-8'
             # email.send()
             bn.save()
+            messages.success(request, 'Form  submited successfully.')
 
-        return render(request, 'home/index.html', {'form': form})    
+        return HttpResponseRedirect(reverse('contact_us'))

@@ -122,3 +122,6 @@ class Contact(models.Model):
     number = models.CharField(max_length=20)
     subject = models.CharField(max_length=50)
     message = models.CharField(max_length=1500)
+
+    class Meta:
+        verbose_name = 'Inbox'
