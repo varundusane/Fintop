@@ -85,12 +85,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'FinTop',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
-         "init_command": "SET foreign_key_checks = 0;",
-    },
+            "init_command": "SET foreign_key_checks = 0;",
+        },
     }
 }
 
@@ -139,12 +139,12 @@ STATICFILES_DIRS = [
 
 # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST="smtp.zoho.com.au"
-EMAIL_PORT=465
-EMAIL_USE_SSL=True
-EMAIL_HOST_USER="mail@fintop.com.au"
-DEFAULT_FROM_EMAIL="Fintop <mail@fintop.com.au>"
-#EMAIL_HOST_PASSWORD="SL@Top1Day"
-EMAIL_HOST_PASSWORD="HHgcLSz4Ws9E"
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = "smtp.zoho.com.au"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = "mail@fintop.com.au"
+DEFAULT_FROM_EMAIL = "Fintop <mail@fintop.com.au>"
+# EMAIL_HOST_PASSWORD="SL@Top1Day"
+EMAIL_HOST_PASSWORD = "HHgcLSz4Ws9E"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/semantic.html"

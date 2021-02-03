@@ -30,6 +30,7 @@ from django.contrib.staticfiles import finders
 
 #===== Landing page views ====#
 
+
 class home(View):
     def get(self, request):
         user = self.request.user
@@ -45,8 +46,10 @@ class home(View):
 
         return render(request, 'home/index.html', {'val': val})
 
+
 def agreement(request):
     return render(request, 'commons/agreement.html', {})
+
 
 class loan(SingleTableView):
     login_url = '/login/'
@@ -57,21 +60,27 @@ class loan(SingleTableView):
         template_name = 'dashboard/loan.html'
         user = self.request.user
         table = Loan.objects.all().filter(user=user)
-        
+
         return render(request, template_name, {'table': table})
+
 
 def about(request):
     return render(request, 'home/about.html')
+
 
 def home_loan(request):
     return render(request, 'home/home_loan.html')
 
 
-
 def ts(request):
-    return render(request, 'commons/Terms.html', {})
+    return render(request, 'home/Terms.html', {})
+
+
+def PrivacyPolicy(request):
+    return render(request, 'home/PrivacyPolicy.html', {})
 
 #===== Dashboard views ====#
+
 
 class dashboard(View):
     login_url = '/login/'
@@ -99,6 +108,7 @@ class dashboard(View):
 #         for fieldname in ['username', 'password1', 'password2']:
 #             self.fields[fieldname].help_text = None
 
+
 class SignUpView(View):
     form_class = SignUpForm
 
@@ -121,15 +131,16 @@ class SignUpView(View):
         if form.is_valid():
             emaill = form.cleaned_data['email']
             if User.objects.filter(email=emaill).exists():
-                
-               return HttpResponse('User with same email already exists, Please try again with different Username!!')
+
+                return HttpResponse('User with same email already exists, Please try again with different Username!!')
             else:
                 user = form.save(commit=False)
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
                 reff = Referral(referred_by_id=uid, user_id=user.pk)
                 reff.save()
-                new_profile = Profile(user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
+                new_profile = Profile(
+                    user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -145,7 +156,8 @@ class SignUpView(View):
             # return redirect('login')
                 return render(request, self.template_name, {'form': form})
         else:
-            return render(request, self.template_name, {'form': form})    
+            return render(request, self.template_name, {'form': form})
+
 
 class ActivateAccount(View):
 
@@ -179,7 +191,7 @@ class ProfileViews(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('home')
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
-   
+
     template_name = 'dashboard/my-profile.html'
 
 
@@ -194,16 +206,16 @@ def ProfileView(request, pk):
 
             if form2.is_valid():
                 form2.save()
-                
+
     form = ProfileForm(instance=User.objects.get(id=pk))
     form2 = ProfileForms(instance=profile)
     return render(request, 'dashboard/my-profile.html', {"form": form, 'form2': form2})
 
 
-    
 def prf(request):
     #     query_results = Referral.objects.all()
     return render(request, 'commons/profile1.html', {})
+
 
 def success(request):
     return render(request, 'dashboard/success.html', {})
@@ -215,7 +227,6 @@ class SignUpVieww(View):
     template_name = 'account/signup.html'
 
     @classmethod
-    
     def ref(self, request, uid, *args, **kwargs):
         form = self.form_class()
         # link = request.GET.get('ref=', None)
@@ -224,23 +235,22 @@ class SignUpVieww(View):
     def get(self, request,  *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
-  
-    
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-              
+
         if form.is_valid():
-           
+
             emaill = form.cleaned_data['email']
             if User.objects.filter(email=emaill).exists():
-                
-               return HttpResponse('User with same email already exists, Please try again with different Username!!')
+
+                return HttpResponse('User with same email already exists, Please try again with different Username!!')
             else:
                 user = form.save(commit=False)
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
-                new_profile = Profile(user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
+                new_profile = Profile(
+                    user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -260,7 +270,8 @@ class SignUpVieww(View):
                 return render(request, self.template_name, {'form': form})
         else:
             return render(request, self.template_name, {'form': form})
-            
+
+
 class write_pdf_view(LoginRequiredMixin, View):
     model = Business
     form_class = BusinessForm
@@ -277,7 +288,7 @@ class write_pdf_view(LoginRequiredMixin, View):
         template_path = 'commons/agreement.html'
         form = self.form_class(request.POST)
         user = self.request.user
-        
+
         if form.is_valid():
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
@@ -292,7 +303,7 @@ class write_pdf_view(LoginRequiredMixin, View):
             response['Content-Disposition'] = 'filename="agreement.pdf"'
             fname = request.POST["fullname"]
             sign = request.POST["signature"]
-            fil = open(f"agreement/{user.username}.pdf" ,'w+b')
+            fil = open(f"agreement/{user.username}.pdf", 'w+b')
             context = {'fname': fname, 'sign': sign, 'ip': ip}
             template = get_template(template_path)
             html = template.render(context)
@@ -316,15 +327,17 @@ class write_pdf_view(LoginRequiredMixin, View):
             return render(request, 'dashboard/success.html', {'status': 1})
             # return render(request, 'commons/agreement.html', {'form':form, 'ip':ip})
 
+
 class ReferralListView(SingleTableView):
     model = Referral
     table_class = ReferralTable
     model = BankInfo
     form_class = BankInfoForm
     template_name = 'dashboard/ref.html'
+
     def get(self, request):
         user = self.request.user
-        if request.user.is_anonymous :
+        if request.user.is_anonymous:
             val = 0
         else:
             verify = Verification.objects.filter(user=user)
@@ -333,37 +346,38 @@ class ReferralListView(SingleTableView):
                 val = val[0]['is_bizpartner']
             else:
                 val = 0
-        try:  
+        try:
             formdetails = BankInfo.objects.get(user_id=self.request.user)
         except BankInfo.DoesNotExist:
             formdetails = None
 
         form = BankInfoForm(instance=formdetails)
         contextt = {
-            'form':form,
+            'form': form,
             'formdetails': formdetails
-            }
-        
-        table = Referral.objects.all().filter(referred_by=user)                             
-        return render(request,'dashboard/ref.html', {'val' : val, 'table' : table, 'form':form, 'formdetails': formdetails}) 
+        }
+
+        table = Referral.objects.all().filter(referred_by=user)
+        return render(request, 'dashboard/ref.html', {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
+
     def post(self, request, *args, **kwargs):
         template_path = 'dashboard/bank.html'
-         
+
         # formdetails = BankInfo.objects.filter(user_id=self.request.user)[0]
-        try:  
+        try:
             formdetails = BankInfo.objects.get(user_id=self.request.user)
             form = self.form_class(request.POST, instance=formdetails)
         except BankInfo.DoesNotExist:
             form = self.form_class(request.POST)
         user = self.request.user
         if form.is_valid():
-          
+
             bn = form.save(commit=False)
             bn.user_id = user
             bn.save()
 
+        return render(request, template_path, {'form': form})
 
-        return render(request, template_path, {'form':form})    
 
 class bank(View):
     model = BankInfo
@@ -400,6 +414,7 @@ class bank(View):
 
         return render(request, 'dashboard/bank.html', {'form': form})
 
+
 class applyloan(View):
     model = Loan
     form_class = LoanForm
@@ -410,8 +425,8 @@ class applyloan(View):
     def get(self, request,  *args, **kwargs):
         form = self.form_class()
         user = self.request.user
-       
-        return render(request, self.template_name, {'loan':LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm})
+
+        return render(request, self.template_name, {'loan': LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm})
 
     def post(self, request, *args, **kwargs):
         template_path = 'dashboard/loan.html'
@@ -419,7 +434,7 @@ class applyloan(View):
         user = self.request.user
 
         if form.is_valid():
-            
+
             bn = form.save(commit=False)
             bn.user_id = user.pk
             # bn.loan_wname = user.get_full_name()
@@ -427,7 +442,7 @@ class applyloan(View):
             # bn.loan_wphone = profile.phnumber
             # bn.loan_wemail = user.email
             bn.save()
-            
+
             td = request.POST.get('td', None)
             share = request.POST.get('share', None)
             mf = request.POST.get('mf', None)
@@ -436,30 +451,35 @@ class applyloan(View):
             print("liabilitys", liabilitys)
             if td:
                 td_description = request.POST['td_description']
-                td_total =  request.POST['td_total_value']
-                a_a = Additional_assets(loan = bn, types="Term Deposit", description=td_description, total_value=td_total)
+                td_total = request.POST['td_total_value']
+                a_a = Additional_assets(
+                    loan=bn, types="Term Deposit", description=td_description, total_value=td_total)
                 a_a.save()
             if share:
                 td_description = request.POST['share_description']
-                td_total =  request.POST['share_total_value']
-                a_a = Additional_assets(loan = bn, types="Shares", description=td_description, total_value=td_total)
+                td_total = request.POST['share_total_value']
+                a_a = Additional_assets(
+                    loan=bn, types="Shares", description=td_description, total_value=td_total)
                 a_a.save()
             if mf:
                 td_description = request.POST['mf_description']
-                td_total =  request.POST['mf_total_value']
-                a_a = Additional_assets(loan = bn, types="Managed Funds", description=td_description, total_value=td_total)
+                td_total = request.POST['mf_total_value']
+                a_a = Additional_assets(
+                    loan=bn, types="Managed Funds", description=td_description, total_value=td_total)
                 a_a.save()
 
             if gifts:
                 td_description = request.POST['gift_description']
-                td_total =  request.POST['gift_total_value']
-                a_a = Additional_assets(loan = bn, types="Gifts", description=td_description, total_value=td_total)
+                td_total = request.POST['gift_total_value']
+                a_a = Additional_assets(
+                    loan=bn, types="Gifts", description=td_description, total_value=td_total)
                 a_a.save()
             if liabilitys != 'No':
-                get_type = request.POST['types'] 
-                get_owned = request.POST['owned'] 
-                get_description = request.POST['description'] 
-                add_liabilities = Additional_liabilities(loan=bn, types=get_type, owned=get_owned, description=get_description)
+                get_type = request.POST['types']
+                get_owned = request.POST['owned']
+                get_description = request.POST['description']
+                add_liabilities = Additional_liabilities(
+                    loan=bn, types=get_type, owned=get_owned, description=get_description)
                 add_liabilities.save()
             print('===>', td)
             td_total_value = request.POST['td_total_value']
@@ -467,6 +487,7 @@ class applyloan(View):
         # table = Loan.objects.all().filter(user=user)
         # return render(request, 'dashboard/loan.html', {'loan':LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm, 'table': table})
         return redirect('loan')
+
 
 class contact(View):
     model = Contact
