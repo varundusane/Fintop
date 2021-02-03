@@ -28,8 +28,7 @@ SECRET_KEY = 'b$^9mhdrvvi4gfu0july04-x7=l^4_jtt#)u@fux1wr1&0i0v4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = ['13.54.96.6', 'uat.fintop.com.au', 'www.uat.fintop.com.au']
 
 # Application definition
 INSTALLED_APPS = [
@@ -83,14 +82,10 @@ WSGI_APPLICATION = 'FinTop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'FinTop',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
-        },
+            'read_default_file': '/etc/mysql/my.cnf',
+    },
     }
 }
 
@@ -132,19 +127,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 LOGIN_REDIRECT_URL = "/dashboard"
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = "smtp.zoho.com.au"
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = "mail@fintop.com.au"
-DEFAULT_FROM_EMAIL = "Fintop <mail@fintop.com.au>"
-# EMAIL_HOST_PASSWORD="SL@Top1Day"
-EMAIL_HOST_PASSWORD = "HHgcLSz4Ws9E"
+EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST="smtp.zoho.com.au"
+EMAIL_PORT=465
+EMAIL_USE_SSL=True
+EMAIL_HOST_USER="mail@fintop.com.au"
+DEFAULT_FROM_EMAIL="Fintop <mail@fintop.com.au>"
+#EMAIL_HOST_PASSWORD="SL@Top1Day"
+EMAIL_HOST_PASSWORD="HHgcLSz4Ws9E"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/semantic.html"

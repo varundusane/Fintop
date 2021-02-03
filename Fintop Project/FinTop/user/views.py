@@ -99,16 +99,6 @@ class dashboard(View):
                 val = 0
         return render(request, self.template_name)
 
-# class SignUpForm(SignUpForm):
-#     email = forms.EmailField(required=True)
-
-#     def __init__(self, *args, **kwargs):
-#         super(SignUpForm, self).__init__(*args, **kwargs)
-
-#         for fieldname in ['username', 'password1', 'password2']:
-#             self.fields[fieldname].help_text = None
-
-
 class SignUpView(View):
     form_class = SignUpForm
 

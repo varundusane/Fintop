@@ -14,7 +14,7 @@ class ReferralAdmin(admin.ModelAdmin):
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
-
+        # do some here
         f = open('some.csv', 'w')
         writer = csv.writer(f)
 
