@@ -25,12 +25,16 @@ from user.views import home
 from django.urls import re_path
 from django.conf import settings
 from django.views.static import serve
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include(core_urls)),
     re_path(r'^static/(?:.*)$', serve,
             {'document_root': settings.STATIC_ROOT, }),
+    
+    
+    
     # Login and Logout
     path('login', auth_views.LoginView.as_view(redirect_authenticated_user=True,
                                                template_name='account/login.html'), name='login'),
@@ -75,6 +79,10 @@ urlpatterns = [
          name='password_reset_complete'),
   
 ]
+# urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+
+
 admin.sites.AdminSite.site_header = 'FINTOP Admin Panel'
 admin.sites.AdminSite.site_title = 'FINTOP Admin'
 admin.sites.AdminSite.index_title = 'Tables'

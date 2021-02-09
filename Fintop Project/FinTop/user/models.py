@@ -4,36 +4,38 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
 
 class Verification(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_bizpartner = models.CharField(max_length=100)
+    class Meta:
+        verbose_name_plural = 'BizPartner'
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phnumber = models.CharField(max_length=20)
     email_confirmed = models.BooleanField(default=False)
+    class Meta:
+        verbose_name = 'Profile Verification'
     
-# @receiver(post_save, sender=User)
-# def update_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-#     instance.profile.save()
 
 class Referral(models.Model):
     referred_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     user =  models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     status = models.CharField(max_length=15)
     commissions = models.CharField(max_length=20)
+    commission_status = models.CharField(max_length=20)
     created_on = models.DateTimeField(auto_now_add=True)
 
     @property
     def get_phone(self):
         return Profile.objects.get(user__id=self.user.id)
+    class Meta:
+        verbose_name_plural = 'Bizpartner Commissions'    
 
 
 
@@ -49,9 +51,13 @@ class Business(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     fullname = models.CharField(max_length=50)
     signature = models.CharField(max_length=50)
-    pdfurl = models.CharField(max_length=50, null=True)
+    # pdfurl = models.CharField(max_length=500, null=True)
+    # added by khushwant singh 
+    pdf = models.FileField(upload_to=user_directory_path, null=True, blank=True)
     status = models.CharField(max_length=50, null=True)
-    created_on = models.DateTimeField(auto_now_add=True)  
+    created_on = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name_plural = 'Bizpartner Data'
 
     
 class Loan(models.Model):
@@ -121,7 +127,8 @@ class Contact(models.Model):
     email = models.EmailField(max_length=20)
     number = models.CharField(max_length=20)
     subject = models.CharField(max_length=50)
-    message = models.CharField(max_length=1500)
+    message = models.TextField(null=False, blank=False, max_length=2500)
+    created_on = models.DateTimeField(auto_now_add=True) 
 
     class Meta:
-        verbose_name = 'Inbox'
+        verbose_name_plural = 'Inbox'

@@ -28,7 +28,7 @@ SECRET_KEY = 'b$^9mhdrvvi4gfu0july04-x7=l^4_jtt#)u@fux1wr1&0i0v4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.54.96.6', 'uat.fintop.com.au', 'www.uat.fintop.com.au']
+ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au']
 
 # Application definition
 INSTALLED_APPS = [
@@ -132,6 +132,9 @@ STATIC_URL = '/static/'
 # ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
 # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
@@ -143,3 +146,5 @@ DEFAULT_FROM_EMAIL="Fintop <mail@fintop.com.au>"
 #EMAIL_HOST_PASSWORD="SL@Top1Day"
 EMAIL_HOST_PASSWORD="HHgcLSz4Ws9E"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/semantic.html"
+RECAPTCHA_SITE_KEY = "6LdI20kaAAAAAGwmzHCfyonzLr5blCL0LQGgmOfJ"
+RECAPTCHA_SECRET_KEY = "6LdI20kaAAAAALHuggfJT_ly4WtvT0CGZxaQLYWF"

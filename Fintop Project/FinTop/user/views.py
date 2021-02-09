@@ -27,7 +27,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
-
+import requests
 #===== Landing page views ====#
 
 
@@ -285,37 +285,41 @@ class write_pdf_view(LoginRequiredMixin, View):
                 ip = x_forwarded_for.split(',')[0]
             else:
                 ip = request.META.get('REMOTE_ADDR')
-            # bn = Business.user=user.id
             bn = form.save(commit=False)
             bn.user = user
-            bn.save()
+            # bn.save()
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'filename="agreement.pdf"'
             fname = request.POST["fullname"]
             sign = request.POST["signature"]
-            fil = open(f"agreement/{user.username}.pdf", 'w+b')
+            fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
+            
             context = {'fname': fname, 'sign': sign, 'ip': ip}
             template = get_template(template_path)
             html = template.render(context)
             pisa_status = pisa.CreatePDF(html, dest=response)
             pisa_status = pisa.CreatePDF(html, dest=fil)
             fil.close()
-            fil = open(f"agreement/{user.username}.pdf", 'r+')
-
+            fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'r+')
+            urll = (os.path.realpath(fil.name))
+            bn = Business (user=user, fullname=fname, signature=sign,pdf= urll#, pdfurl= urlladded by khushwantsingh 
+            )
+            bn.save()
             to_emails = [user.email, settings.EMAIL_HOST_USER]
             subject = "FinTop Agreement"
             email = EmailMessage(
                 subject,  from_email=settings.EMAIL_HOST_USER, to=to_emails)
-            email.attach('FinTopAgreement.pdf', fil.read(), "application/pdf")
+            email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
             print(pisa_status.err)
             email.content_subtype = "pdf"
             email.encoding = 'utf-8'
             email.send()
             fil.close()
-            Verification.objects.create(user=user, is_bizpartner=1)
-            # return response
+            if Verification.objects.filter(user=user, is_bizpartner=1).exists():
+                return render(request, 'dashboard/success.html', {'status': 1})
+            else:
+                Verification.objects.create(user=user, is_bizpartner=1)
             return render(request, 'dashboard/success.html', {'status': 1})
-            # return render(request, 'commons/agreement.html', {'form':form, 'ip':ip})
 
 
 class ReferralListView(SingleTableView):
@@ -351,9 +355,8 @@ class ReferralListView(SingleTableView):
         return render(request, 'dashboard/ref.html', {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
 
     def post(self, request, *args, **kwargs):
-        template_path = 'dashboard/bank.html'
+        template_path = 'dashboard/ref.html'
 
-        # formdetails = BankInfo.objects.filter(user_id=self.request.user)[0]
         try:
             formdetails = BankInfo.objects.get(user_id=self.request.user)
             form = self.form_class(request.POST, instance=formdetails)
@@ -491,6 +494,19 @@ class contact(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+    #         data = {}
+    #         secret_key = settings.RECAPTCHA_SECRET_KEY
+
+    # # captcha verification
+    #         data = {
+    #             'response': data.get('g-recaptcha-response'),
+    #             'secret': secret_key
+    #         }
+    #         resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+    #         result_json = resp.json()
+    #     if not result_json.get('success'):
+    #         return HttpResponseRedirect(reverse('contact_us'))
+    #     else :
             bn = form.save(commit=False)
             # to_emails =  [settings.EMAIL_HOST_USER]
             # message = [request.POST["email"], request.POST["message"]]
@@ -500,6 +516,6 @@ class contact(View):
             # email.encoding = 'utf-8'
             # email.send()
             bn.save()
-            messages.success(request, 'Form  submited successfully.')
+            messages.success(request, 'Form submited successfully.')
 
         return HttpResponseRedirect(reverse('contact_us'))
