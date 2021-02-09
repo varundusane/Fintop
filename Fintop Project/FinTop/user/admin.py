@@ -1,31 +1,59 @@
 from django.contrib import admin
 from .models import Referral, User, Loan, BankInfo, Profile, Additional_assets, Additional_liabilities, Verification, Contact, Business
 from django.db import models
+import os
 
-admin.site.register(Business)
 
+
+
+@admin.register(Business)
+class BusinessAdmin(admin.ModelAdmin):
+    actions = ['download_csv']
+    list_display = ('user', 'fullname', 'signature','pdf',  'status', 'created_on')
+    search_fields = ['user__username']
+    
+    def download_csv(self, request, queryset):
+        import csv
+        from django.http import HttpResponse
+
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
+        writer = csv.writer(f)
+
+        writer.writerow(['id','user', 'fullname', 'signature', 'pdf', 'pdfurl', 'status', 'created_on'])
+
+        for s in queryset:
+            writer.writerow([s.id, s.user, s.fullname, s.signature, s.pdf, s.pdfurl, s.status, s.created_on])
+
+        f.close()
+
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
+        response = HttpResponse(f, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=Bizpartner-data.csv'
+        return response
+
+    download_csv.short_description = "export csv"
 
 @admin.register(Referral)
 class ReferralAdmin(admin.ModelAdmin):
     actions = ['download_csv']
-    list_display = ('referred_by', 'user', 'status')
+    list_display = ('referred_by', 'user', 'status', 'commission_status',  'commissions')
     search_fields = ['referred_by__username']
     
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
-        # do some here
-        f = open('some.csv', 'w')
+
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
 
-        writer.writerow(['id','referred_by','user','status','commissions','created_on'])
+        writer.writerow(['id','referred_by','user','status','commission_status', 'commissions','created_on'])
 
         for s in queryset:
-            writer.writerow([s.id, s.referred_by, s.user, s.status, s.commissions, s.created_on])
+            writer.writerow([s.id, s.referred_by, s.user, s.status, s.commission_status, s.commissions, s.created_on])
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=referral-info.csv'
         return response
@@ -61,7 +89,7 @@ class LoanAdmin(admin.ModelAdmin):
         import csv
         from django.http import HttpResponse
 
-        f = open('some.csv', 'w')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
         writer.writerow(['id','user_id','loan_type','loan_wname','loan_wphone','loan_wemail','vehicle','vehicle_worth','vehicle_money','carloan_pay','accounts','superannuation','credit_card','loans','employment_type','annual_salary','monthly_expense', 'created_on'])
 
@@ -70,7 +98,7 @@ class LoanAdmin(admin.ModelAdmin):
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=loan-info.csv'
         return response
@@ -87,7 +115,7 @@ class BankInfoAdmin(admin.ModelAdmin):
         import csv
         from django.http import HttpResponse
 
-        f = open('some.csv', 'w')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
         writer.writerow(['id','user_id','bankname','acname','acno','bankisc','created_on'])
 
@@ -96,7 +124,7 @@ class BankInfoAdmin(admin.ModelAdmin):
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=bank-info.csv'
         return response
@@ -117,7 +145,7 @@ class ProfileAdmin(admin.ModelAdmin):
     #     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # phnumber = models.CharField(max_length=20)
     # email_confirmed = models.BooleanField(default=False)
-        f = open('some.csv', 'w')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
         writer.writerow(['id','user','phnumber','email_confirmed'])
 
@@ -126,7 +154,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=profile-info.csv'
         return response
@@ -143,7 +171,8 @@ class VerificationAdmin(admin.ModelAdmin):
         import csv
         from django.http import HttpResponse
 
-        f = open('some.csv', 'w')
+        
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
         writer.writerow(['id','user', 'is_bizpartner'])
 
@@ -152,7 +181,7 @@ class VerificationAdmin(admin.ModelAdmin):
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=vrification-info.csv'
         return response
@@ -166,23 +195,24 @@ class ContactAdmin(admin.ModelAdmin):
             'email',
             'number',
             'subject',
-            'message')
+            'message',
+            'created_on')
     actions =['download_csv']
 
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
 
-        f = open('some.csv', 'w')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
-        writer.writerow(['id','name','email','number','subject','message'])
+        writer.writerow(['id','name','email','number','subject','message', 'created_on'])
 
         for s in queryset:
             writer.writerow([s.id, s.name, s.email, s.number, s.subject, s.message])
 
         f.close()
 
-        f = open('some.csv', 'r')
+        f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'r+')
         response = HttpResponse(f, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=inbox-info.csv'
         return response

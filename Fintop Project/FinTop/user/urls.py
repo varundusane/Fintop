@@ -44,7 +44,7 @@ urlpatterns = [
 
         path('biz/<int:pk>', ProfileView, name='biz'),
 
-        path('agreement', views.agreement, name='agreement'),
+        # path('agreement', views.agreement, name='agreement'),edit by khushwantsingh 
 
         # path('profile', views.prf, name='profile1'),
 
