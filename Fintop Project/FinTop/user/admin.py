@@ -10,6 +10,7 @@ import os
 class BusinessAdmin(admin.ModelAdmin):
     actions = ['download_csv']
     list_display = ('user', 'fullname', 'signature','pdf',  'status', 'created_on')
+    
     search_fields = ['user__username']
     
     def download_csv(self, request, queryset):
@@ -163,9 +164,24 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Verification)
 class VerificationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'is_bizpartner')
+
+    # def is_bizpartner(self):
+    #     return self.is_bizpartner=1
+    # is_bizpartner = "Yes"
+
+    list_display = ('user', 'is_Bizpartner')
+
     search_fields = ['user__username']
     actions =['download_csv']
+
+    def is_Bizpartner(self, obj):
+        if obj.is_bizpartner=="1":
+            is_Bizpartner = "yes "
+            return is_Bizpartner
+        elif obj.is_bizpartner=="0":
+            is_Bizpartner="No"
+            return is_Bizpartner
+   
 
     def download_csv(self, request, queryset):
         import csv
@@ -198,6 +214,7 @@ class ContactAdmin(admin.ModelAdmin):
             'message',
             'created_on')
     actions =['download_csv']
+    search_fields = ['name']
 
     def download_csv(self, request, queryset):
         import csv

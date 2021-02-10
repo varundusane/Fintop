@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .utils import render_to_pdf
+from django.core.files import File
+from io import BytesIO
 
 
 
@@ -53,11 +56,18 @@ class Business(models.Model):
     signature = models.CharField(max_length=50)
     # pdfurl = models.CharField(max_length=500, null=True)
     # added by khushwant singh 
-    pdf = models.FileField(upload_to=user_directory_path, null=True, blank=True)
+    pdf = models.FileField(upload_to= "BizpartnerAgreement/" ,null=True, blank=True)
     status = models.CharField(max_length=50, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name_plural = 'Bizpartner Data'
+
+    def generate_obj_pdf(instance):
+     obj = instance
+     context = {'fname': obj.fullname, 'sign': obj.signature}
+     pdf = render_to_pdf('commons/agreement.html', context)
+     filename = f"agreement/{obj.user.username}.pdf"
+     obj.pdf.save(filename, File(BytesIO(pdf.content)))
 
     
 class Loan(models.Model):

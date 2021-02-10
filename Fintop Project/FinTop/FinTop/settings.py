@@ -131,9 +131,12 @@ STATIC_URL = '/static/'
 #     os.path.join(BASE_DIR, 'static'),
 # ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# edited by khushwant singh 
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
 
-MEDIA_URL_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_root")
+
 
 # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
