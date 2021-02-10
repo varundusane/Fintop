@@ -1,26 +1,27 @@
-{% extends 'layouts/home.html' %} {% block title %} Contact us {% endblock title %} {% block content %} {% load static %} {% load crispy_forms_tags %}
+{% extends 'layouts/home.html' %} {% block title %} Contact us {% endblock title %} {% block content %} {% load static
+%} {% load crispy_forms_tags %}
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
 <script src="https://www.google.com/recaptcha/api.js?render=6LdI20kaAAAAAGwmzHCfyonzLr5blCL0LQGgmOfJ"></script>
 <script>
-  // 3
-  grecaptcha.ready(function() {
-      // 4
-      $('#form').submit(function(e){
-          var form = this;
-          // 5
-          e.preventDefault()
-          grecaptcha.execute('6LdI20kaAAAAAGwmzHCfyonzLr5blCL0LQGgmOfJ', {action: 'form'}).then(function(token) {
-              // 6
-              $('#recaptcha').val(token)
-              // 7
-              form.submit()
-          });
-      })
-  });
- </script>
+    // 3
+    grecaptcha.ready(function () {
+        // 4
+        $('#form').submit(function (e) {
+            var form = this;
+            // 5
+            e.preventDefault()
+            grecaptcha.execute('6LdI20kaAAAAAGwmzHCfyonzLr5blCL0LQGgmOfJ', { action: 'form' }).then(function (token) {
+                // 6
+                $('#recaptcha').val(token)
+                // 7
+                form.submit()
+            });
+        })
+    });
+</script>
 
 <!-- ======= Breadcrumbs ======= -->
 <section class="breadcrumbs">
@@ -78,34 +79,32 @@ crossorigin="anonymous"></script>
         <div class="row align-items-center">
             <div class="col-lg-7 map-box">
                 <div class="map">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.733892556606!2d144.74157721532032!3d-37.86651647974292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad689aafc559957%3A0x117c1ede9ca075f7!2sOffice%20207%2F111%20Overton%20Rd%2C%20Williams%20Landing%20VIC%203027%2C%20Australia!5e0!3m2!1sen!2sin!4v1609189720037!5m2!1sen!2sin"
-                        width="100%" height="650" frameborder="0" style="border:0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3149.733892556606!2d144.74157721532032!3d-37.86651647974292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad689aafc559957%3A0x117c1ede9ca075f7!2sOffice%20207%2F111%20Overton%20Rd%2C%20Williams%20Landing%20VIC%203027%2C%20Australia!5e0!3m2!1sen!2sin!4v1609189720037!5m2!1sen!2sin"
+                        width="100%" height="650" frameborder="0" style="border:0" allowfullscreen=""
+                        aria-hidden="false" tabindex="0"></iframe>
                 </div>
             </div>
-            {% if messages %}
-                <div class="form-group">
-                <div class="col-12">
-                    {% for message in messages %}
-                    {% if message.tags == "error" %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                    {% elif message.tags == "success" %}
-                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                    {% endif %}
-                    {% endfor %}
+            <div class="col-lg-5 contact-form">
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 {% endif %}
-            <div class="col-lg-5 contact-form">
+                {% endfor %}
+                {% endif %}
                 <form method="post" id="form" class="php-email-form">
                     {% csrf_token %} {{form | crispy}}
                     <div class="pt-4 text-center">
@@ -119,7 +118,7 @@ crossorigin="anonymous"></script>
 
 {% endblock content %} {% block javascript %}
 <script>
-    $(function() {
+    $(function () {
         $('#nav-contact_us').addClass('active');
     });
 </script>
