@@ -1,7 +1,7 @@
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 from django.contrib.auth import login
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage,EmailMultiAlternatives
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -28,6 +28,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 import requests
+from .utils import render_to_pdf
 #===== Landing page views ====#
 
 
@@ -287,11 +288,33 @@ class write_pdf_view(LoginRequiredMixin, View):
                 ip = request.META.get('REMOTE_ADDR')
             bn = form.save(commit=False)
             bn.user = user
-            # bn.save()
             response = HttpResponse(content_type='application/pdf')
             response['Content-Disposition'] = 'filename="agreement.pdf"'
             fname = request.POST["fullname"]
             sign = request.POST["signature"]
+            bn = Business (user=user, fullname=fname, signature=sign#,pdf= request.FileField[urlls], pdfurl= urll#added by khushwantsingh 
+            )
+            bn.save()
+            bn= Business.objects.get(user=user)
+            bn.generate_obj_pdf()
+            # template = get_template(template_path)
+            # context = {'fname': fname, 'sign': sign, 'ip': ip}
+            # html = template.render(context)
+            # pdf = render_to_pdf(template_path, context)
+            # if pdf:
+
+            #     response = HttpResponse(pdf, content_type='application/pdf')
+            #     # filename = f"agreement_{user.username}.pdf"
+
+            #     filename = "agreement_%s.pdf" %(user.username)
+            #     content = "inline; filename='%s'" %(filename)
+            #     download = request.GET.get("download")
+            #     if download:
+            #         content = "attachment; filename='%s'" %(filename)
+            #     response['Content-Disposition'] = content
+            #     return response
+            # return HttpResponse("Not found")
+            # edited by khushwant singh 
             fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
             
             context = {'fname': fname, 'sign': sign, 'ip': ip}
@@ -302,17 +325,15 @@ class write_pdf_view(LoginRequiredMixin, View):
             fil.close()
             fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'r+')
             urll = (os.path.realpath(fil.name))
-            bn = Business (user=user, fullname=fname, signature=sign,pdf= urll#, pdfurl= urlladded by khushwantsingh 
-            )
-            bn.save()
             to_emails = [user.email, settings.EMAIL_HOST_USER]
             subject = "FinTop Agreement"
+            
             email = EmailMessage(
-                subject,  from_email=settings.EMAIL_HOST_USER, to=to_emails)
-            email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
-            print(pisa_status.err)
-            email.content_subtype = "pdf"
-            email.encoding = 'utf-8'
+                subject, "Congratulations You are Successfully Registered as a BizPartner.", from_email=settings.EMAIL_HOST_USER, to=to_emails)
+            # email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
+            email.attach_file(urll)
+            # email.content_subtype = "pdf"
+            # email.encoding = 'utf-8'
             email.send()
             fil.close()
             if Verification.objects.filter(user=user, is_bizpartner=1).exists():
