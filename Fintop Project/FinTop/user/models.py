@@ -29,7 +29,7 @@ class Profile(models.Model):
 class Referral(models.Model):
     referred_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     user =  models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-    status = models.CharField(max_length=15)
+    status = models.CharField(max_length=15, null=True, blank=True)
     commissions = models.CharField(max_length=20)
     commission_status = models.CharField(max_length=20)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -107,8 +107,10 @@ def updateStatus(sender, instance, created, **kwargs):
         print(loan.id)
     except Loan.DoesNotExist:
         return 
-    
-    Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)
+    # if (Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)):
+        Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)
+    # else:
+    #     return None    
 
 
 
