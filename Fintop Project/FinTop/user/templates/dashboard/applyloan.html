@@ -12,6 +12,15 @@
         font-weight: bold;
         margin-left: 2px;
     }
+
+    .highlight-hidden-fields{
+        border-bottom-right-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+        background-color: #dff2ff;
+        margin-top: -16px;
+        padding: 15px 15px 1px 15px;
+        margin-bottom: 8px;
+    }
 </style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -54,11 +63,11 @@
                                 {{ loan.loan_type|as_crispy_field }}
                                 <h3>Asset</h3>
                                 {{ loan.vehicle|as_crispy_field }}
-                                <div id="vehicle-input-boxes">
+                                <div id="vehicle-input-boxes" class="highlight-hidden-fields">
                                     {{ loan.vehicle_worth|as_crispy_field }} {{ loan.vehicle_money|as_crispy_field }}
                                 </div>
                                 {{ loan.carloan_pay|as_crispy_field }} {{ loan.accounts|as_crispy_field }} {{ loan.superannuation|as_crispy_field }} {{ loan.additional_asset|as_crispy_field }}
-                                <div id="asset-input-boxes">
+                                <div id="asset-input-boxes" class="highlight-hidden-fields">
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="td-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Term Deposit</a>
@@ -191,8 +200,12 @@
                             </div>
                             <div class="col-lg-6">
                                 <h3>Liabilities</h3>
-                                {{ loan.credit_card|as_crispy_field }} {{ loan.credit_limit|as_crispy_field }} {{ loan.liability_loan|as_crispy_field }}
-                                <div id="liability-input-boxes" style="display: none">
+                                {{ loan.credit_card|as_crispy_field }} 
+                                <div class="highlight-hidden-fields" id="loan-credit_limit-fields">
+                                    {{ loan.credit_limit|as_crispy_field }} 
+                                </div>
+                                 {{ loan.liability_loan|as_crispy_field }}
+                                <div id="liability-input-boxes" style="display: none" class="highlight-hidden-fields">
                                     {{ liability|crispy }}
                                 </div>
                                 {{ loan.loans|as_crispy_field }}
@@ -279,9 +292,9 @@
 
     $('#id_credit_card').change(function() {
         if ($(this).val() == "Yes") {
-            $("#div_id_credit_limit").slideDown();
+            $("#loan-credit_limit-fields").slideDown();
         } else {
-            $("#div_id_credit_limit").slideUp();
+            $("#loan-credit_limit-fields").slideUp();
         }
     }).trigger("change");
 
