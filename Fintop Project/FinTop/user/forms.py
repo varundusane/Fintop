@@ -4,24 +4,26 @@ from user.models import *
 from django.contrib.auth.forms import UserCreationForm
 
 # Sign Up Form
+
+
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(max_length=254)
-    phnumber = forms.CharField(label = "Phone Number",required=False)
+    phnumber = forms.CharField(label="Phone Number", required=False)
 
     class Meta:
         model = User
         fields = [
-            'username', 
-            'first_name', 
+            'username',
+            'first_name',
             'last_name',
             'phnumber',
-            'email', 
-            'password1', 
-            'password2', 
-            ]
-        
+            'email',
+            'password1',
+            'password2',
+        ]
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('username')
@@ -30,6 +32,8 @@ class SignUpForm(UserCreationForm):
         return email
 
 # Profile Form
+
+
 class ProfileForm(forms.ModelForm):
     username = forms.CharField(disabled=True)
 
@@ -37,70 +41,80 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = [
             'username',
-            'first_name', 
+            'first_name',
             'last_name',
             'email',
-            ]
+        ]
         help_texts = {
             'username': None,
         }
-       
+
+
 class ProfileForms(forms.ModelForm):
-    phnumber = forms.Field(label = "Phone Number")
+    phnumber = forms.Field(label="Phone Number")
+
     class Meta:
         model = Profile
         fields = ['phnumber']
 
 
-    
 class ReferralForm(forms.ModelForm):
-    user = forms.Field(label = "Lead Name")
+    user = forms.Field(label="Lead Name")
+
     class Meta:
         model = Referral
         fields = [
             'user',
             'status',
             'commissions'
-            ]
+        ]
+
 
 class BankInfoForm(forms.ModelForm):
-    bankname = forms.CharField(label = "Bank Name", max_length=50)
-    acname = forms.CharField(label = "Account Name", max_length=50)
-    acno = forms.CharField(label = "Account Number")
-    bankisc= forms.CharField(label = "BSB", max_length=50)
+    bankname = forms.CharField(label="Bank Name", max_length=50)
+    acname = forms.CharField(label="Account Name", max_length=50)
+    acno = forms.CharField(label="Account Number")
+    bankisc = forms.CharField(label="BSB", max_length=50)
+
     class Meta:
-        model = BankInfo 
+        model = BankInfo
         fields = [
             'bankname',
             'acname',
             'acno',
             'bankisc',
-            ]
+        ]
+
 
 class BusinessForm(forms.ModelForm):
-    fullname = forms.CharField(label = "Full Name", max_length=50)
-    signature = forms.CharField(label = "Signature Text", max_length=50)
+    fullname = forms.CharField(label="Full Name", max_length=50)
+    signature = forms.CharField(label="Signature Text", max_length=50)
+
     class Meta:
         model = Business
         fields = [
             'fullname',
             'signature',
-            ]
+        ]
+
 
 class VerificationForm(forms.ModelForm):
     class Meta:
-        model = Verification 
+        model = Verification
         fields = [
             'user',
             'is_bizpartner',
-            ]
+        ]
+
 
 class LoanForm(forms.ModelForm):
-    yesorno = (('---------', '---------'),("Yes","Yes"),("No","No"))
-    liability_loan = forms.ChoiceField( label="Do you have any other additional liabilities ?", choices=yesorno)
-    carloan_pay = forms.ChoiceField(label="Can you pay off car loan immediately?", choices=yesorno)
-    ltype = (("Buy a Home","Buy a Home"),("Refinance","Refinance"))
-   
+    yesorno = (('---------', '---------'), ("Yes", "Yes"), ("No", "No"))
+    liability_loan = forms.ChoiceField(
+        label="Do you have any other additional liabilities ?", choices=yesorno)
+    carloan_pay = forms.ChoiceField(
+        label="If required, can you pay off the car loan immediately?", choices=yesorno)
+    ltype = (("Buy a Home", "Buy a Home"), ("Refinance", "Refinance"))
+
     class Meta:
         model = Loan
         fields = [
@@ -120,8 +134,8 @@ class LoanForm(forms.ModelForm):
             'employment_type',
             'annual_salary',
             'monthly_expense'
-    ]
-        labels={
+        ]
+        labels = {
             'loan_type': "Do you want to buy a new house or refinance existing loan ?",
             "vehicle": "Do you have car or any other type of vehicle ?",
             "carloan_pay": "If required, can you apy off car loan immediately ?",
@@ -133,11 +147,14 @@ class LoanForm(forms.ModelForm):
             # "liability_loan": "Do you have any other additional liabilities ?"
         }
 
+
 class AdditionalAssetsForm(forms.ModelForm):
-    
-    description = forms.CharField(max_length=15, label="Description", required=False)
+
+    description = forms.CharField(
+        max_length=15, label="Description", required=False)
     total_value = forms.CharField(label="Total Value", required=False)
-    select_assets = (("Term Deposit" , "Term Deposit"), ("Shares", "Shares"), ("Managed Funds", "Managed Funds"), ("Gifts", "Gifts"))
+    select_assets = (("Term Deposit", "Term Deposit"), ("Shares", "Shares"),
+                     ("Managed Funds", "Managed Funds"), ("Gifts", "Gifts"))
 
     class Meta:
         model = Additional_assets
@@ -147,10 +164,13 @@ class AdditionalAssetsForm(forms.ModelForm):
             'total_value'
         ]
 
+
 class AdditionalLiabilitiesForm(forms.ModelForm):
-    liability_types = (("tax debt","tax debt"),("other lines of credit","other lines of credit"))
+    liability_types = (("tax debt", "tax debt"),
+                       ("other lines of credit", "other lines of credit"))
     owned = forms.CharField(required=False)
-    description = forms.CharField(max_length=15, label="Description", required=False)
+    description = forms.CharField(
+        max_length=15, label="Description", required=False)
 
     class Meta:
         model = Additional_liabilities
@@ -158,14 +178,16 @@ class AdditionalLiabilitiesForm(forms.ModelForm):
             'types',
             'owned',
             'description'
-        ]        
+        ]
+
 
 class ContactForm(forms.ModelForm):
-    name = forms.CharField(label = 'Name', required=True)
-    email = forms.EmailField(label = 'Email', required=True)
-    number = forms.CharField(label = 'Phone Number' , required=True)
-    subject = forms.CharField(label = 'Subject', required=True)
-    message = forms.CharField(widget=forms.Textarea, required=True)        
+    name = forms.CharField(label='Name', required=True)
+    email = forms.EmailField(label='Email', required=True)
+    number = forms.CharField(label='Phone Number', required=True)
+    subject = forms.CharField(label='Subject', required=True)
+    message = forms.CharField(widget=forms.Textarea, required=True)
+
     class Meta:
         model = Contact
         fields = [

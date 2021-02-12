@@ -64,9 +64,9 @@
                                 <h3>Asset</h3>
                                 {{ loan.vehicle|as_crispy_field }}
                                 <div id="vehicle-input-boxes" class="highlight-hidden-fields">
-                                    {{ loan.vehicle_worth|as_crispy_field }} {{ loan.vehicle_money|as_crispy_field }}
+                                    {{ loan.vehicle_worth|as_crispy_field }} {{ loan.vehicle_money|as_crispy_field }} {{ loan.carloan_pay|as_crispy_field }}
                                 </div>
-                                {{ loan.carloan_pay|as_crispy_field }} {{ loan.accounts|as_crispy_field }} {{ loan.superannuation|as_crispy_field }} {{ loan.additional_asset|as_crispy_field }}
+                                {{ loan.accounts|as_crispy_field }} {{ loan.superannuation|as_crispy_field }} {{ loan.additional_asset|as_crispy_field }}
                                 <div id="asset-input-boxes" class="highlight-hidden-fields">
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
@@ -245,7 +245,7 @@
         "<small>How much amount in total you have in all your savings/current accounts?</small>"
     );
     $("#div_id_liability_type").append(
-        "<small>Do you have any other liabilities such as tax debt, or other lines of credit?</small>"
+        "<small>Do you have any other liabilities such as tax debt, existing mortgage or other lines of credit?</small>"
     );
     $("#div_id_additional").append(
         "<small>Do you have any other assets such as term deposits shares funds or gifts, if yes please provide below details?</small>"
