@@ -161,7 +161,10 @@ class ActivateAccount(View):
 
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
-            user.profile.email_confirmed = True
+            
+            pr = Profile.objects.get(user=user)
+            pr.email_confirmed=True
+            pr.save()
             user.save()
             login(request, user)
             messages.success(request, ('Your account have been confirmed.'))
@@ -279,6 +282,8 @@ class write_pdf_view(LoginRequiredMixin, View):
         template_path = 'commons/agreement.html'
         form = self.form_class(request.POST)
         user = self.request.user
+        
+        #
 
         if form.is_valid():
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -292,8 +297,7 @@ class write_pdf_view(LoginRequiredMixin, View):
             response['Content-Disposition'] = 'filename="agreement.pdf"'
             fname = request.POST["fullname"]
             sign = request.POST["signature"]
-            bn = Business (user=user, fullname=fname, signature=sign#,pdf= request.FileField[urlls], pdfurl= urll#added by khushwantsingh 
-            )
+            bn = Business (user=user, fullname=fname, signature=sign)
             bn.save()
             bn= Business.objects.get(user=user)
             bn.generate_obj_pdf()
@@ -314,7 +318,7 @@ class write_pdf_view(LoginRequiredMixin, View):
             #     response['Content-Disposition'] = content
             #     return response
             # return HttpResponse("Not found")
-            # edited by khushwant singh 
+        
             fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
             
             context = {'fname': fname, 'sign': sign, 'ip': ip}

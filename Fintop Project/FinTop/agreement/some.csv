@@ -1,3 +1,2 @@
-id,name,email,number,subject,message,created_on
-2,sdsad sadsads,vdusane6@gmail.com,8087953268,asdasdas,fdsfsd sdvsd sdvsdvsdv sdsdv
-1,test,asdas@asd.sds,8585858585,adassd,asdasdsadasdsadasds
+id,user_id,loan_type,loan_wname,loan_wphone,loan_wemail,vehicle,vehicle_worth,vehicle_money,carloan_pay,accounts,superannuation,credit_card,loans,employment_type,annual_salary,monthly_expense,created_on
+1,8,Buy a Home,Pritam,252-256,mail@mail.com,Yes,2255,5454,Yes,54554,54545,Yes,1000,Employee,140000,100000,2021-02-08 11:10:19+00:00

@@ -24,7 +24,7 @@ class Profile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'Profile Verification'
-    
+
 
 class Referral(models.Model):
     referred_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
@@ -54,11 +54,10 @@ class Business(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     fullname = models.CharField(max_length=50)
     signature = models.CharField(max_length=50)
-    # pdfurl = models.CharField(max_length=500, null=True)
-    # added by khushwant singh 
     pdf = models.FileField(upload_to= "BizpartnerAgreement/" ,null=True, blank=True)
     status = models.CharField(max_length=50, null=True)
     created_on = models.DateTimeField(auto_now_add=True)
+    
     class Meta:
         verbose_name_plural = 'Bizpartner Data'
 
@@ -69,6 +68,7 @@ class Business(models.Model):
      filename = f"agreement/{obj.user.username}.pdf"
      obj.pdf.save(filename, File(BytesIO(pdf.content)))
 
+    
     
 class Loan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')

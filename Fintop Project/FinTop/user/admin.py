@@ -9,10 +9,19 @@ import os
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
     actions = ['download_csv']
-    list_display = ('user', 'fullname', 'signature','pdf',  'status', 'created_on')
-    
+    list_display = ('user', 'fullname', 'signature','pdf', 'phonenum','emailid', 'status', 'created_on')
     search_fields = ['user__username']
-    
+    def phonenum(self, obj):
+        u = obj.user
+        p = Profile.objects.get(user=u)
+        phone = p.phnumber
+        # obj.phone_no=Profile.phnumber
+        return phone
+    def emailid(self, obj):
+        e = obj.user.email
+        return e
+
+
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
@@ -143,9 +152,7 @@ class ProfileAdmin(admin.ModelAdmin):
         import csv
         from django.http import HttpResponse
 
-    #     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # phnumber = models.CharField(max_length=20)
-    # email_confirmed = models.BooleanField(default=False)
+    
         f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
         writer.writerow(['id','user','phnumber','email_confirmed'])
