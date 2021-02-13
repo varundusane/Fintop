@@ -100,7 +100,8 @@ class LoanForm(forms.ModelForm):
     liability_loan = forms.ChoiceField( label="Do you have any other additional liabilities ?", choices=yesorno)
     carloan_pay = forms.ChoiceField(label="Can you pay off car loan immediately?", choices=yesorno)
     ltype = (("Buy a Home","Buy a Home"),("Refinance","Refinance"))
-   
+    accounts = forms.CharField(max_length=20, required=True, label="$ in Saving Accounts ?")
+    superannuation = forms.CharField(max_length=20, required=True, label="$ in Superannuation")
     class Meta:
         model = Loan
         fields = [
@@ -124,9 +125,9 @@ class LoanForm(forms.ModelForm):
         labels={
             'loan_type': "Do you want to buy a new house or refinance existing loan ?",
             "vehicle": "Do you have car or any other type of vehicle ?",
-            "carloan_pay": "If required, can you apy off car loan immediately ?",
-            "accounts": "$ in Saving Accounts ?",
-            "superannuation": "$ in Superannuation",
+            "vehicle_worth": "Car Market Value",
+            "vehicle_money": "Car Loan",
+            "carloan_pay": "If required, can you pay off the car loan immediately ?",
             "additional_asset": "Do you have any additional assets ?",
             "home_content": "Approximate value  of total home contains you may have ?",
             "credit_card": "Do you have any Credit Card ?",
@@ -149,8 +150,8 @@ class AdditionalAssetsForm(forms.ModelForm):
 
 class AdditionalLiabilitiesForm(forms.ModelForm):
     liability_types = (("tax debt","tax debt"),("other lines of credit","other lines of credit"))
-    owned = forms.CharField(required=False)
-    description = forms.CharField(max_length=15, label="Description", required=False)
+    owned = forms.CharField(required=False, label="$ Owned")
+    description = forms.CharField(max_length=15, label="Per annum Interest rate", required=False)
 
     class Meta:
         model = Additional_liabilities
@@ -158,7 +159,9 @@ class AdditionalLiabilitiesForm(forms.ModelForm):
             'types',
             'owned',
             'description'
-        ]        
+        ]
+        labels={"types": "Loan Type",
+        }            
 
 class ContactForm(forms.ModelForm):
     name = forms.CharField(label = 'Name', required=True)
