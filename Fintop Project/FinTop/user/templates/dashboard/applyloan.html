@@ -64,9 +64,9 @@
                                 <h3>Asset</h3>
                                 {{ loan.vehicle|as_crispy_field }}
                                 <div id="vehicle-input-boxes" class="highlight-hidden-fields">
-                                    {{ loan.vehicle_worth|as_crispy_field }} {{ loan.vehicle_money|as_crispy_field }}
+                                    {{ loan.vehicle_worth|as_crispy_field }} {{ loan.vehicle_money|as_crispy_field }} {{ loan.carloan_pay|as_crispy_field }}
                                 </div>
-                                {{ loan.carloan_pay|as_crispy_field }} {{ loan.accounts|as_crispy_field }} {{ loan.superannuation|as_crispy_field }} {{ loan.additional_asset|as_crispy_field }}
+                                {{ loan.accounts|as_crispy_field }} {{ loan.superannuation|as_crispy_field }} {{ loan.additional_asset|as_crispy_field }}
                                 <div id="asset-input-boxes" class="highlight-hidden-fields">
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
@@ -87,111 +87,81 @@
                                             <input type="checkbox" id="fname" name="td" value="1">
                                             <label for="fname">Tick here if you want to include Term Deposit</label>
                                             <div id="div_id_description" class="form-group">
-
                                                 <label for="id_description" class="">
                                                       Description
                                                   </label>
                                                 <div class="">
                                                     <input type="text" name="td_description" maxlength="15" class="textinput textInput form-control" id="id_description">
                                                 </div>
-
-
                                             </div>
                                             <div id="div_id_total_value" class="form-group">
-
                                                 <label for="id_total_value" class="">
                                                       Total Value
                                                   </label>
                                                 <div class="">
                                                     <input type="text" name="td_total_value" class="textinput textInput form-control" id="id_total_value">
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="share-tab">
-                                            <input type="checkbox" id="fname" name="share" value="1">
-                                            <label for="fname">Tick here if you want to include Shares</label>
+                                            <input type="checkbox" id="share" name="share" value="1">
+                                            <label for="share">Tick here if you want to include Shares</label>
                                             <div id="div_id_description" class="form-group">
-
                                                 <label for="id_description" class="">
                                                       Description
                                                   </label>
 
                                                 <div class="">
                                                     <input type="text" name="share_description" maxlength="15" class="textinput textInput form-control" id="id_description">
-
                                                 </div>
-
-
                                             </div>
                                             <div id="div_id_total_value" class="form-group">
-
                                                 <label for="id_total_value" class="">
                                                       Total Value
                                                   </label>
                                                 <div class="">
                                                     <input type="text" name="share_total_value" class="textinput textInput form-control" id="id_total_value">
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="mf-tab">
-                                            <input type="checkbox" id="fname" name="mf" value="1">
-                                            <label for="fname">Tick here if you want to include Managed Funds</label>
+                                            <input type="checkbox" id="mf" name="mf" value="1">
+                                            <label for="mf">Tick here if you want to include Managed Funds</label>
                                             <div id="div_id_description" class="form-group">
-
                                                 <label for="id_description" class=" requiredField">
                                                       Description
                                                   </label>
-
                                                 <div class="">
                                                     <input type="text" name="mf_description" maxlength="15" class="textinput textInput form-control" id="id_description">
-
                                                 </div>
-
-
                                             </div>
                                             <div id="div_id_total_value" class="form-group">
-
                                                 <label for="id_total_value" class=" requiredField">
                                                       Total Value
                                                   </label>
-
                                                 <div class="">
                                                     <input type="text" name="mf_total_value" class="textinput textInput form-control" id="id_total_value">
-
                                                 </div>
-
-
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="giftid" role="tabpanel" aria-labelledby="gift-tab"><input type="checkbox" id="fname" name="gifts" value="1">
-                                            <label for="fname">Tick here if you want to include Gifts</label>
+                                        <div class="tab-pane fade" id="giftid" role="tabpanel" aria-labelledby="gift-tab">
+                                            <input type="checkbox" id="gifts" name="gifts" value="1">
+                                            <label for="gifts">Tick here if you want to include Gifts</label>
                                             <div id="div_id_description" class="form-group">
-
                                                 <label for="id_description" class=" requiredField">
                                                       Description
                                                   </label>
-
                                                 <div class="">
                                                     <input type="text" name="gift_description" maxlength="15" class="textinput textInput form-control" id="id_description">
-
                                                 </div>
-
-
                                             </div>
                                             <div id="div_id_total_value" class="form-group">
-
                                                 <label for="id_total_value" class=" requiredField">
                                                       Total Value
                                                   </label>
-
                                                 <div class="">
                                                     <input type="text" name="gift_total_value" class="textinput textInput form-control" id="id_total_value">
-
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -257,7 +227,7 @@
         "<small>Please tell us how much is your approximate monthly expense for living? (For example, you can consider including Groceries, Clothing, Phone, internet Bill, entertainment, Utility bills, Insurance, Medical and health, Childcare, Education, Investment property maintenance, Rent, Other living expense, Other financial commitments)</small>"
     );
     $("#div_id_liability_loan").append(
-        "<small>Do you have any other liabilities such as tax debt, or other lines of credit?</small>"
+        "<small>Do you have any other liabilities such as tax debt, existing mortgage or other lines of credit?</small>"
     );
     $("#div_id_credit_card").append(
         "<small>Do you have any credit card/s if yes please provide total combine Credit limit on all credit cards</small>"
