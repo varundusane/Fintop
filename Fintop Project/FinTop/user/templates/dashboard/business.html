@@ -81,5 +81,22 @@
     $(document).on('change', '#terms', function() {
         $('#btn-submit').attr('disabled', !$(this).prop('checked'));
     });
+
+    $("form").validate({
+        rules: {
+            fullname:{
+                required:true,
+                alpha_only: true,
+                minlength: 3,
+                maxlength: 50,
+            },
+            signature:{
+                required:true,
+                alpha_only: true,
+                minlength: 3,
+                maxlength: 50,
+            },
+        }
+    });
 </script>
 {% endblock javascript %}

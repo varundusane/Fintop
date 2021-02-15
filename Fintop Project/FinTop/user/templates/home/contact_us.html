@@ -121,8 +121,31 @@
 
 {% endblock content %} {% block javascript %}
 <script>
+    
     $(function () {
         $('#nav-contact_us').addClass('active');
+
+        $("#form").validate({
+            rules: {
+                name:{
+                    required:true,
+                    alpha_only: true,
+                    minlength: 3,
+                    maxlength: 30,
+                },
+                number : {
+                    phone_num: true,
+                },
+                subject:{
+                    required: true,
+                    minlength: 3
+                },
+                message:{
+                    required: true,
+                    minlength: 3
+                },
+            }
+          });
     });
 </script>
 {% endblock javascript %}

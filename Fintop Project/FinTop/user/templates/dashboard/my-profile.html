@@ -54,6 +54,23 @@
 <script>
     $(function() {
         $('#nav-profile').addClass('active');
+
+        $("form").validate({
+            rules: {
+                first_name:{
+                    required:true,
+                    alpha_only: true,
+                    minlength: 3,
+                    maxlength: 50,
+                },
+                last_name:{
+                    required:true,
+                    alpha_only: true,
+                    minlength: 3,
+                    maxlength: 50,
+                },
+            }
+        });
     });
 </script>
 {% endblock javascript %}
