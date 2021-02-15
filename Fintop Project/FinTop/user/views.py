@@ -130,8 +130,23 @@ class SignUpView(View):
                 user.save()
                 reff = Referral(referred_by_id=uid, user_id=user.pk)
                 reff.save()
+                ph = list(form.cleaned_data['phnumber'])
+                if ph[0] is "+":                    
+                    phnumber = ''.join(map(str, ph))
+                else:    
+                    if ph[0] is "0":
+                        ph.pop(0)
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+")
+                        phnumber = ''.join(map(str, ph))
+                    else:
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+") 
+                        phnumber = ''.join(map(str, ph))
                 new_profile = Profile(
-                    user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
+                    user=user, phnumber=phnumber, email_confirmed=False)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -168,11 +183,11 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             messages.success(request, ('Your account have been confirmed.'))
-            return redirect('home')
+            return redirect('dashboard_home')
         else:
             messages.warning(
                 request, ('The confirmation link was invalid, possibly because it has already been used.'))
-            return redirect('home')
+            return redirect('dashboard_home')
 
 # Edit Profile View
 # @login_required(login_url='/login/')
@@ -195,11 +210,30 @@ def ProfileView(request, pk):
     if request.method == 'POST':
         form1 = ProfileForm(request.POST, instance=User.objects.get(id=pk))
         if form1.is_valid():
+            
             form1.save()
             form2 = ProfileForms(request.POST, instance=profile)
 
             if form2.is_valid():
+                ph = list(form2.cleaned_data['phnumber'])
+                if ph[0] is "+":                    
+                    phnumber = ''.join(map(str, ph))
+                else:    
+                    if ph[0] is "0":
+                        ph.pop(0)
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+")
+                        phnumber = ''.join(map(str, ph))
+                    else:
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+") 
+                        phnumber = ''.join(map(str, ph))
+                
                 form2.save()
+                profile.phnumber = phnumber
+                profile.save()
 
     form = ProfileForm(instance=User.objects.get(id=pk))
     form2 = ProfileForms(instance=profile)
@@ -240,11 +274,27 @@ class SignUpVieww(View):
 
                 return HttpResponse('User with same email already exists, Please try again with different Username!!')
             else:
+                
                 user = form.save(commit=False)
+                ph = list(form.cleaned_data['phnumber'])
+                if ph[0] is "+":                    
+                    phnumber = ''.join(map(str, ph))
+                else:    
+                    if ph[0] is "0":
+                        ph.pop(0)
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+")
+                        phnumber = ''.join(map(str, ph))
+                    else:
+                        ph.insert(0,"1")
+                        ph.insert(0,"6")
+                        ph.insert(0,"+") 
+                        phnumber = ''.join(map(str, ph))
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
                 new_profile = Profile(
-                    user=user, phnumber=request.POST['phnumber'], email_confirmed=False)
+                    user=user, phnumber=phnumber, email_confirmed=False)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -274,7 +324,7 @@ class write_pdf_view(LoginRequiredMixin, View):
     template_name = 'dashboard/business.html'
     # def write_pdf_vieww(request):
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request,  *args, **kwargs):     
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -291,61 +341,69 @@ class write_pdf_view(LoginRequiredMixin, View):
                 ip = x_forwarded_for.split(',')[0]
             else:
                 ip = request.META.get('REMOTE_ADDR')
-            bn = form.save(commit=False)
-            bn.user = user
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'filename="agreement.pdf"'
-            fname = request.POST["fullname"]
-            sign = request.POST["signature"]
-            bn = Business (user=user, fullname=fname, signature=sign)
-            bn.save()
-            bn= Business.objects.get(user=user)
-            bn.generate_obj_pdf()
-            # template = get_template(template_path)
-            # context = {'fname': fname, 'sign': sign, 'ip': ip}
-            # html = template.render(context)
-            # pdf = render_to_pdf(template_path, context)
-            # if pdf:
 
-            #     response = HttpResponse(pdf, content_type='application/pdf')
-            #     # filename = f"agreement_{user.username}.pdf"
+            if Business.objects.filter(user=user).exists():
 
-            #     filename = "agreement_%s.pdf" %(user.username)
-            #     content = "inline; filename='%s'" %(filename)
-            #     download = request.GET.get("download")
-            #     if download:
-            #         content = "attachment; filename='%s'" %(filename)
-            #     response['Content-Disposition'] = content
-            #     return response
-            # return HttpResponse("Not found")
-        
-            fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
+                return messages.success(request, 'You are already a BizPartner !!')
+            else:    
+                bn = form.save(commit=False)
+
+                bn.user = user
+                response = HttpResponse(content_type='application/pdf')
+                response['Content-Disposition'] = 'filename="agreement.pdf"'
+                fname = request.POST["fullname"]
+                sign = request.POST["signature"]
+                bn = Business (user=user, fullname=fname, signature=sign)
+
+                bn.save()
+                bn= Business.objects.get(user=user)
+                bn.generate_obj_pdf()
+                # template = get_template(template_path)
+                # context = {'fname': fname, 'sign': sign, 'ip': ip}
+                # html = template.render(context)
+                # pdf = render_to_pdf(template_path, context)
+                # if pdf:
+
+                #     response = HttpResponse(pdf, content_type='application/pdf')
+                #     # filename = f"agreement_{user.username}.pdf"
+
+                #     filename = "agreement_%s.pdf" %(user.username)
+                #     content = "inline; filename='%s'" %(filename)
+                #     download = request.GET.get("download")
+                #     if download:
+                #         content = "attachment; filename='%s'" %(filename)
+                #     response['Content-Disposition'] = content
+                #     return response
+                # return HttpResponse("Not found")
             
-            context = {'fname': fname, 'sign': sign, 'ip': ip}
-            template = get_template(template_path)
-            html = template.render(context)
-            pisa_status = pisa.CreatePDF(html, dest=response)
-            pisa_status = pisa.CreatePDF(html, dest=fil)
-            fil.close()
-            fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'r+')
-            urll = (os.path.realpath(fil.name))
-            to_emails = [user.email, settings.EMAIL_HOST_USER]
-            subject = "FinTop Agreement"
-            
-            email = EmailMessage(
-                subject, "Congratulations You are Successfully Registered as a BizPartner.", from_email=settings.EMAIL_HOST_USER, to=to_emails)
-            # email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
-            email.attach_file(urll)
-            # email.content_subtype = "pdf"
-            # email.encoding = 'utf-8'
-            email.send()
-            fil.close()
-            if Verification.objects.filter(user=user, is_bizpartner=1).exists():
+                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
+                
+                context = {'fname': fname, 'sign': sign, 'ip': ip}
+                template = get_template(template_path)
+                html = template.render(context)
+                pisa_status = pisa.CreatePDF(html, dest=response)
+                pisa_status = pisa.CreatePDF(html, dest=fil)
+                fil.close()
+                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'r+')
+                urll = (os.path.realpath(fil.name))
+                to_emails = [user.email, settings.EMAIL_HOST_USER]
+                subject = "FinTop Agreement"
+                
+                email = EmailMessage(
+                    subject, "Congratulations You are Successfully Registered as a BizPartner.", from_email=settings.EMAIL_HOST_USER, to=to_emails)
+                # email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
+                email.attach_file(urll)
+                # email.content_subtype = "pdf"
+                # email.encoding = 'utf-8'
+                email.send()
+                fil.close()
+                if Verification.objects.filter(user=user, is_bizpartner=1).exists():
+                    return render(request, 'dashboard/success.html', {'status': 1})
+                else:
+                    Verification.objects.create(user=user, is_bizpartner=1)
                 return render(request, 'dashboard/success.html', {'status': 1})
-            else:
-                Verification.objects.create(user=user, is_bizpartner=1)
-            return render(request, 'dashboard/success.html', {'status': 1})
-
+        # else:    
+        #     return HttpResponse(request, 'Form submission successful')
 
 class ReferralListView(SingleTableView):
     model = Referral
@@ -519,6 +577,7 @@ class contact(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+            
     #         data = {}
     #         secret_key = settings.RECAPTCHA_SECRET_KEY
 
@@ -540,7 +599,24 @@ class contact(View):
             #     subject, message ,  from_email=settings.EMAIL_HOST_USER, to=to_emails)
             # email.encoding = 'utf-8'
             # email.send()
-            bn.save()
-            messages.success(request, 'Form submited successfully.')
+            ph = list(form.cleaned_data['number'])
+            if ph[0] is "+":                    
+                phnumber = ''.join(map(str, ph))
+            else:    
+                if ph[0] is "0":
+                    ph.pop(0)
+                    ph.insert(0,"1")
+                    ph.insert(0,"6")
+                    ph.insert(0,"+")
+                    phnumber = ''.join(map(str, ph))
+                else:
+                    ph.insert(0,"1")
+                    ph.insert(0,"6")
+                    ph.insert(0,"+") 
+                    phnumber = ''.join(map(str, ph))
+            
+            bn.save(number=phnumber)
+
+            
 
         return HttpResponseRedirect(reverse('contact_us'))

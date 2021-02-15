@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from .utils import render_to_pdf
 from django.core.files import File
 from io import BytesIO
+from django.core.validators import RegexValidator
+from phone_field import PhoneField
 
 
 
@@ -20,7 +22,10 @@ class Verification(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phnumber = models.CharField(max_length=20)
+    # phnumber = models.CharField(max_length=20)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phnumber = models.CharField(validators=[phone_regex], max_length=20, blank=True) # validators should be a list
+    # phone = PhoneField(blank=True, help_text='Contact phone number')
     email_confirmed = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'Profile Verification'
@@ -46,11 +51,12 @@ class BankInfo(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     bankname = models.CharField(max_length=50)
     acname = models.CharField(max_length=50)
-    acno = models.CharField(max_length=50)
+    acno = models.CharField(max_length=20)
     bankisc = models.CharField(max_length=50)
     created_on = models.DateTimeField(auto_now_add=True)
 
 class Business(models.Model):
+    # alphabets = RegexValidator(r'^[a-zA-Z]*$', 'Only alphabets are allowed.')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
     fullname = models.CharField(max_length=50)
     signature = models.CharField(max_length=50)
@@ -82,7 +88,7 @@ class Loan(models.Model):
     vehicle = models.CharField(max_length=25,choices=yesorno)
     vehicle_worth = models.CharField(max_length=20, null=True, blank=True)
     vehicle_money = models.CharField(max_length=20, null=True, blank=True)
-    carloan_pay = models.CharField(max_length=25,choices=yesorno,blank=True)
+    carloan_pay = models.CharField(max_length=25,choices=yesorno, null=True, blank=True)
     accounts = models.CharField(max_length=20, null=True, blank=True)
     superannuation = models.CharField(max_length=20, null=True, blank=True)
     additional_asset = models.CharField(max_length=25,choices=yesorno)
@@ -104,11 +110,11 @@ def updateStatus(sender, instance, created, **kwargs):
     
     try:
         loan = Loan.objects.filter(user=User.objects.get(id=instance.user.id)).first()
-        print(loan.id)
+        # print(loan.id)
     except Loan.DoesNotExist:
         return 
     # if (Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)):
-        Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)
+    Referral.objects.filter(user=User.objects.get(id=instance.user.id)).update(status=loan.loan_status)
     # else:
     #     return None    
 
@@ -137,7 +143,8 @@ class Additional_liabilities(models.Model):
 class Contact(models.Model):
     name = models.CharField(max_length=20)
     email = models.EmailField(max_length=20)
-    number = models.CharField(max_length=20)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
     subject = models.CharField(max_length=50)
     message = models.TextField(null=False, blank=False, max_length=2500)
     created_on = models.DateTimeField(auto_now_add=True) 
