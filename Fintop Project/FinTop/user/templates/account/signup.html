@@ -67,8 +67,40 @@
     $(document).on('change', '#terms', function() {
         $('#btn-submit').attr('disabled', !$(this).prop('checked'));
     });
+    $('#nav-signup').addClass('active');
+    $('#div_id_phnumber').append('<small class="form-text text-muted">Do not include +61</small>');
+    $("form").validate({
+        rules: {
+            username:{
+                required: true,
+                minlength: 3,
+                regex: '^[a-zA-Z\-\@\.\_\+]+$',
+            },
+            first_name:{
+                required:true,
+                alpha_only: true,
+                minlength: 3,
+                maxlength: 30,
+            },
+            last_name:{
+                required:true,
+                alpha_only: true,
+                minlength: 3,
+                maxlength: 30,
+            },
+            phnumber : {
+                phone_num: true,
+            },
+            password1:{
+                required: true,
+                minlength: 8
+            },
+            password2: {
+                equalTo: "#id_password1"
+            },
+        }
+    });
 </script>
-
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNVLT41L6D"></script>

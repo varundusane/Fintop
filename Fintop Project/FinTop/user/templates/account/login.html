@@ -39,3 +39,17 @@
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+<script>
+    $('#nav-login').addClass('active');
+    $("form").validate({
+        rules: {
+            password:{
+                required: true,
+                minlength: 3
+            },
+        }
+    });
+</script>
+{% endblock javascript %}

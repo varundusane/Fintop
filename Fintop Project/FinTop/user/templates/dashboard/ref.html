@@ -94,6 +94,33 @@
 <script>
     $(function() {
         $('#nav-referral').addClass('active');
+
+        $("form").validate({
+            rules: {
+                bankname:{
+                    required:true,
+                    alpha_only: true,
+                    minlength: 3,
+                    maxlength: 50,
+                },
+                acname:{
+                    required:true,
+                    alpha_only: true,
+                    minlength: 3,
+                    maxlength: 50,
+                },
+                acno:{
+                    required:true,
+                    num_only: true,
+                },
+                bankisc:{
+                    required:true,
+                    alphanum_only: true,
+                    minlength: 3,
+                    maxlength: 50,
+                },
+            }
+        });
     });
 </script>
 {% endblock javascript %}
