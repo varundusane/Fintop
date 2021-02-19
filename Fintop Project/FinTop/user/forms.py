@@ -119,7 +119,7 @@ class VerificationForm(forms.ModelForm):
             ]
 
 class LoanForm(forms.ModelForm):
-    yesorno = (('---------', '---------'),("Yes","Yes"),("No","No"))
+    yesorno = (('', '---------'),("Yes","Yes"),("No","No"))
     liability_loan = forms.ChoiceField( label="Do you have any other additional liabilities ?", choices=yesorno, required=False)
     carloan_pay = forms.ChoiceField(label="If required, Can you pay off car loan immediately?", choices=yesorno, required=False)
     ltype = (("Buy a Home","Buy a Home"),("Refinance","Refinance"))
@@ -158,6 +158,7 @@ class LoanForm(forms.ModelForm):
             "credit_card": "Do you have any Credit Card ?",
             # "liability_loan": "Do you have any other additional liabilities ?"
         }
+    
 
 class AdditionalAssetsForm(forms.ModelForm):
     

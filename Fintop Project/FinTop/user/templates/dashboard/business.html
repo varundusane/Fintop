@@ -37,7 +37,7 @@
                                 {% csrf_token %} {{ form|crispy }}
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="terms" name="terms">
-                                    <label class="custom-control-label" for="terms">I Agree with <a href="#" data-toggle="modal" data-target="#exampleModal">Terms & Conditions</a></label>
+                                    <label class="custom-control-label" for="terms"> <a href="#" data-toggle="modal" data-target="#exampleModal">Read and accept agreement</a></label>
                                 </div>
                                 <div class="text-center mt-4">
                                     <button class="btn btn-primary w-75" type="submit" disabled id="btn-submit">Submit</button>
@@ -64,7 +64,7 @@
                 </button>
             </div>
             <div class="modal-body text-justify">
-                {% include "general_partials/terms.html" %}
+                {% include "commons/agreement.html" %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>

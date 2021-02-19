@@ -358,24 +358,6 @@ class write_pdf_view(LoginRequiredMixin, View):
                 bn.save()
                 bn= Business.objects.get(user=user)
                 bn.generate_obj_pdf()
-                # template = get_template(template_path)
-                # context = {'fname': fname, 'sign': sign, 'ip': ip}
-                # html = template.render(context)
-                # pdf = render_to_pdf(template_path, context)
-                # if pdf:
-
-                #     response = HttpResponse(pdf, content_type='application/pdf')
-                #     # filename = f"agreement_{user.username}.pdf"
-
-                #     filename = "agreement_%s.pdf" %(user.username)
-                #     content = "inline; filename='%s'" %(filename)
-                #     download = request.GET.get("download")
-                #     if download:
-                #         content = "attachment; filename='%s'" %(filename)
-                #     response['Content-Disposition'] = content
-                #     return response
-                # return HttpResponse("Not found")
-            
                 fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
                 
                 context = {'fname': fname, 'sign': sign, 'ip': ip}
@@ -391,10 +373,8 @@ class write_pdf_view(LoginRequiredMixin, View):
                 
                 email = EmailMessage(
                     subject, "Congratulations You are Successfully Registered as a BizPartner.", from_email=settings.EMAIL_HOST_USER, to=to_emails)
-                # email.attach('FinTopAgreement of {user.username}.pdf', fil.read(), "application/pdf")
                 email.attach_file(urll)
-                # email.content_subtype = "pdf"
-                # email.encoding = 'utf-8'
+            
                 email.send()
                 fil.close()
                 if Verification.objects.filter(user=user, is_bizpartner=1).exists():
@@ -402,8 +382,7 @@ class write_pdf_view(LoginRequiredMixin, View):
                 else:
                     Verification.objects.create(user=user, is_bizpartner=1)
                 return render(request, 'dashboard/success.html', {'status': 1})
-        # else:    
-        #     return HttpResponse(request, 'Form submission successful')
+
 
 class ReferralListView(SingleTableView):
     model = Referral
@@ -482,8 +461,7 @@ class bank(View):
         user = self.request.user
 
         if form.is_valid():
-            # BankInfo.objects.create(user=user, bankname=bankname, acno=form.acno, bankisc=form.bankisc)
-            # self.BankInfo.save()
+      
             bn = form.save(commit=False)
             bn.user_id = user
             bn.save()
@@ -513,16 +491,14 @@ class applyloan(View):
 
             bn = form.save(commit=False)
             bn.user_id = user.pk
-            # bn.loan_wname = user.get_full_name()
-            # profile = Profile.objects.get(user=user)
-            # bn.loan_wphone = profile.phnumber
-            # bn.loan_wemail = user.email
+         
             bn.save()
 
             td = request.POST.get('td', None)
             share = request.POST.get('share', None)
             mf = request.POST.get('mf', None)
             gifts = request.POST.get('gifts', None)
+            
             liabilitys = request.POST.get('liability_loan', None)
             print("liabilitys", liabilitys)
             if td:

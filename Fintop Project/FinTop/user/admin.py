@@ -154,10 +154,10 @@ class LoanAdmin(admin.ModelAdmin):
 
         f = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f'agreement/some.csv'), 'w+')
         writer = csv.writer(f)
-        writer.writerow(['id','user_id', 'Username', 'First_name', 'Last_name',  'Phone_Number', 'Email', 'loan_type','loan_wname','loan_wphone','loan_wemail','vehicle','vehicle_worth','vehicle_money','carloan_pay','accounts','superannuation','credit_card','loans','employment_type','annual_salary','monthly_expense', 'created_on'])
+        writer.writerow(['id','user_id', 'Username', 'First_name', 'Last_name',  'Phone_Number', 'Email', 'Do you have any other additional liabilities ?','loan_wname','loan_wphone','loan_wemail','Do you have car or any other type of vehicle ?','Car Market Value','Car Loan','If required, Can you pay off car loan immediately?','in Saving Accounts ?','in Superannuation','Do you have any Credit Card ?','How much existing Mortgage loan you have currently?','employment_type','Annual Salary  (Indicate Combined Family Income)','Monthly Expense (Indicate Combined Family Expense)', 'created_on','Do you have any additional assets ?','home_content'])
 
         for s in queryset:
-            writer.writerow([s.id, s.user_id, s.user.username, s.user.first_name, s.user.last_name, s.user.profile.phnumber, s.user.email, s.loan_type, s.loan_wname, s.loan_wphone, s.loan_wemail, s.vehicle, s.vehicle_worth, s.vehicle_money, s.carloan_pay, s.accounts, s.superannuation, s.credit_card, s.loans, s.employment_type, s.annual_salary, s.monthly_expense, s.created_on])
+            writer.writerow([s.id, s.user_id, s.user.username, s.user.first_name, s.user.last_name, s.user.profile.phnumber, s.user.email, s.loan_type, s.loan_wname, s.loan_wphone, s.loan_wemail, s.vehicle, s.vehicle_worth, s.vehicle_money, s.carloan_pay, s.accounts, s.superannuation, s.credit_card, s.loans, s.employment_type, s.annual_salary, s.monthly_expense, s.created_on,s.additional_asset,s.home_content])
 
         f.close()
 
