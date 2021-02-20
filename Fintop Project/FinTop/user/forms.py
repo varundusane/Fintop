@@ -10,7 +10,7 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(max_length=254)
     # phnumber = forms.CharField(label = "Phone Number",required=True)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number is invalid")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
     phnumber = forms.CharField(validators=[phone_regex], max_length=18,label ="Phone Number",required=True  )
 
 
@@ -64,7 +64,7 @@ class ProfileForm(forms.ModelForm):
         }
        
 class ProfileForms(forms.ModelForm):
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
     phnumber = forms.CharField(validators=[phone_regex], max_length=17,label ="Phone Number",required=True  )
     class Meta:
         model = Profile
@@ -193,7 +193,7 @@ class ContactForm(forms.ModelForm):
     alphabets = RegexValidator(r'^[a-zA-Z_ +]*$', 'Only alphabets are allowed.')
     name = forms.CharField(label = 'Name', required=True, validators=[alphabets])
     email = forms.EmailField(label = 'Email', required=True)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number is not valid")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
     number = forms.CharField(validators=[phone_regex], max_length=17,label ="Phone Number",required=True  )
     subject = forms.CharField(label = 'Subject', required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)        

@@ -21,7 +21,7 @@ class Verification(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number is invalid")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
     phnumber = models.CharField(validators=[phone_regex], max_length=20, blank=True) # validators should be a list
     email_confirmed = models.BooleanField(default=False)
     class Meta:
@@ -144,7 +144,7 @@ class Additional_liabilities(models.Model):
 class Contact(models.Model):
     name = models.CharField(max_length=20)
     email = models.EmailField(max_length=20)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
     number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
     subject = models.CharField(max_length=50)
     message = models.TextField(null=False, blank=False, max_length=2500)
