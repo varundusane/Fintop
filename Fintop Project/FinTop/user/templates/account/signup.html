@@ -1,4 +1,5 @@
-﻿{% extends 'layouts/account.html' %} {% block title %} Signup {% endblock title %} {% block content %} {% load static %} {% load crispy_forms_tags %}
+﻿{% extends 'layouts/account.html' %} {% block title %} Signup {% endblock title %} {% block content %} {% load static %}
+{% load crispy_forms_tags %}
 
 <div class="container">
     {% if form.errors %} {% for field in form %} {% for error in field.errors %}
@@ -26,7 +27,13 @@
 
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="terms" name="terms" required>
-                    <label class="custom-control-label" for="terms">I Agree with <a href="#" data-toggle="modal" data-target="#exampleModal">Terms & Conditions</a>, <a href="#" data-toggle="modal" data-target="#exampleModal2">Privacy policy</a></label>
+                    <<<<<<< HEAD <label class="custom-control-label" for="terms">I Agree with <a href="#"
+                            data-toggle="modal" data-target="#exampleModal">Terms & Conditions</a></label>
+                        =======
+                        <label class="custom-control-label" for="terms">I Agree with <a href="#" data-toggle="modal"
+                                data-target="#exampleModal">Terms & Conditions</a>, <a href="#" data-toggle="modal"
+                                data-target="#exampleModal2">Privacy policy</a></label>
+                        >>>>>>> origin/main
                 </div>
 
                 <div class="pt-4 text-center">
@@ -42,13 +49,14 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-justify">
@@ -60,13 +68,14 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Privacy policy</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-justify">
@@ -82,34 +91,33 @@
 
 {% endblock content %} {% block javascript %}
 <script>
-    $(document).on('change', '#terms', function() {
+    $(document).on('change', '#terms', function () {
         $('#btn-submit').attr('disabled', !$(this).prop('checked'));
     });
     $('#nav-signup').addClass('active');
     $('#div_id_phnumber').append('<small class="form-text text-muted">Do not include +61</small>');
     $("form").validate({
         rules: {
-            username:{
+            username: {
                 required: true,
                 minlength: 3,
-                regex: '^[a-zA-Z\-\@\.\_\+]+$',
             },
-            first_name:{
-                required:true,
+            first_name: {
+                required: true,
                 alpha_only: true,
                 minlength: 3,
                 maxlength: 30,
             },
-            last_name:{
-                required:true,
+            last_name: {
+                required: true,
                 alpha_only: true,
                 minlength: 3,
                 maxlength: 30,
             },
-            phnumber : {
+            phnumber: {
                 phone_num: true,
             },
-            password1:{
+            password1: {
                 required: true,
                 minlength: 8
             },
@@ -135,7 +143,7 @@
 
 <!-- Google Tag Manager -->
 <script>
-    (function(w, d, s, l, i) {
+    (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({
             'gtm.start': new Date().getTime(),
@@ -154,9 +162,9 @@
 
 <!-- Facebook Pixel Code -->
 <script>
-    ! function(f, b, e, v, n, t, s) {
+    ! function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
-        n = f.fbq = function() {
+        n = f.fbq = function () {
             n.callMethod ?
                 n.callMethod.apply(n, arguments) : n.queue.push(arguments)
         };
@@ -178,8 +186,8 @@
 
 <!-- Hotjar Tracking Code for https://fintop.com.au -->
 <script>
-    (function(h, o, t, j, a, r) {
-        h.hj = h.hj || function() {
+    (function (h, o, t, j, a, r) {
+        h.hj = h.hj || function () {
             (h.hj.q = h.hj.q || []).push(arguments)
         };
         h._hjSettings = {
@@ -195,7 +203,10 @@
 </script>
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-56NSK5Q" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-56NSK5Q" height="0" width="0"
+        style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- Facebook Pixel Code -->
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=407869257116939&ev=PageView&noscript=1"/></noscript> {% endblock javascript %}
+<noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=407869257116939&ev=PageView&noscript=1" /></noscript> {% endblock javascript
+%}
