@@ -2,13 +2,17 @@ from django import forms
 from django.contrib.auth.models import User
 from user.models import *
 from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import RegexValidator
 
 # Sign Up Form
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.EmailField(max_length=254)
-    phnumber = forms.CharField(label = "Phone Number",required=True)
+    # phnumber = forms.CharField(label = "Phone Number",required=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
+    phnumber = forms.CharField(validators=[phone_regex], max_length=18,label ="Phone Number",required=True  )
+
 
     class Meta:
         model = User
@@ -25,9 +29,23 @@ class SignUpForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('username')
+        
         if email and User.objects.filter(email=email).exclude(username=username).exists():
             raise forms.ValidationError(u'Email addresses must be unique.')
         return email
+
+    # def clean_phnum(self):
+    #     phnumber = list(self.cleaned_data.get('phnumber'))
+    #     if phnumber[0] is "0":
+    #         phnumber.pop(0)
+    #         phnumber.insert(0,"+61")
+    #         return str(phnumber)
+    #     else:
+    #         phnumber.insert(0,"+61")
+    #         return str(phnumber)
+
+        
+        
 
 # Profile Form
 class ProfileForm(forms.ModelForm):
@@ -46,7 +64,8 @@ class ProfileForm(forms.ModelForm):
         }
        
 class ProfileForms(forms.ModelForm):
-    phnumber = forms.Field(label = "Phone Number")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
+    phnumber = forms.CharField(validators=[phone_regex], max_length=17,label ="Phone Number",required=True  )
     class Meta:
         model = Profile
         fields = ['phnumber']
@@ -55,6 +74,7 @@ class ProfileForms(forms.ModelForm):
     
 class ReferralForm(forms.ModelForm):
     user = forms.Field(label = "Lead Name")
+    commissions = forms.Field(label = "Commissions($)")
     class Meta:
         model = Referral
         fields = [
@@ -78,7 +98,10 @@ class BankInfoForm(forms.ModelForm):
             ]
 
 class BusinessForm(forms.ModelForm):
+    # alphabets = RegexValidator(r'^[a-zA-Z_ +]*$', 'Only alphabets are allowed.')
+    # fullname = forms.CharField(label = "Full Name", max_length=50, validators=[alphabets])
     fullname = forms.CharField(label = "Full Name", max_length=50)
+    # alphabets = RegexValidator(r'^[a-zA-Z_ +]*$', 'Only alphabets are allowed.')
     signature = forms.CharField(label = "Signature Text", max_length=50)
     class Meta:
         model = Business
@@ -96,12 +119,16 @@ class VerificationForm(forms.ModelForm):
             ]
 
 class LoanForm(forms.ModelForm):
-    yesorno = (('---------', '---------'),("Yes","Yes"),("No","No"))
-    liability_loan = forms.ChoiceField( label="Do you have any other additional liabilities ?", choices=yesorno)
-    carloan_pay = forms.ChoiceField(label="Can you pay off car loan immediately?", choices=yesorno)
+    yesorno = (('', '---------'),("Yes","Yes"),("No","No"))
+    liability_loan = forms.ChoiceField( label="Do you have any other additional liabilities ?", choices=yesorno, required=False)
+    carloan_pay = forms.ChoiceField(label="If required, Can you pay off car loan immediately?", choices=yesorno, required=False)
     ltype = (("Buy a Home","Buy a Home"),("Refinance","Refinance"))
     accounts = forms.CharField(max_length=20, required=True, label="$ in Saving Accounts ?")
     superannuation = forms.CharField(max_length=20, required=True, label="$ in Superannuation")
+    home_content = forms.CharField(max_length=50, required=True, label="Approximate value  of total home contains you may have ?")
+    loans = forms.CharField(max_length=50, required=True, label="How much existing Mortgage loan you have currently?")
+    annual_salary = forms.CharField(max_length=50, required=True, label="Annual Salary  (Indicate Combined Family Income)") 
+    monthly_expense = forms.CharField(max_length=50, required=True, label="Monthly Expense (Indicate Combined Family Expense)")
     class Meta:
         model = Loan
         fields = [
@@ -127,12 +154,11 @@ class LoanForm(forms.ModelForm):
             "vehicle": "Do you have car or any other type of vehicle ?",
             "vehicle_worth": "Car Market Value",
             "vehicle_money": "Car Loan",
-            "carloan_pay": "If required, can you pay off the car loan immediately ?",
             "additional_asset": "Do you have any additional assets ?",
-            "home_content": "Approximate value  of total home contains you may have ?",
             "credit_card": "Do you have any Credit Card ?",
             # "liability_loan": "Do you have any other additional liabilities ?"
         }
+    
 
 class AdditionalAssetsForm(forms.ModelForm):
     
@@ -164,9 +190,11 @@ class AdditionalLiabilitiesForm(forms.ModelForm):
         }            
 
 class ContactForm(forms.ModelForm):
-    name = forms.CharField(label = 'Name', required=True)
+    alphabets = RegexValidator(r'^[a-zA-Z_ +]*$', 'Only alphabets are allowed.')
+    name = forms.CharField(label = 'Name', required=True, validators=[alphabets])
     email = forms.EmailField(label = 'Email', required=True)
-    number = forms.CharField(label = 'Phone Number' , required=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
+    number = forms.CharField(validators=[phone_regex], max_length=17,label ="Phone Number",required=True  )
     subject = forms.CharField(label = 'Subject', required=True)
     message = forms.CharField(widget=forms.Textarea, required=True)        
     class Meta:
