@@ -10,7 +10,7 @@ $.validator.addMethod(
 $.validator.addMethod(
     "phone_num",
     function (value, element) {
-        var re = new RegExp('^([0-9]{10,15})$');
+        var re = new RegExp('^([0-9]{9,10})$');
         return this.optional(element) || re.test(value);
     },
     "Please enter valid phone number."
