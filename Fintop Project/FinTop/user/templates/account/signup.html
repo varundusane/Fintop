@@ -27,13 +27,12 @@
 
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="terms" name="terms" required>
-                    <<<<<<< HEAD <label class="custom-control-label" for="terms">I Agree with <a href="#"
-                            data-toggle="modal" data-target="#exampleModal">Terms & Conditions</a></label>
-                        =======
+                   
+                       
                         <label class="custom-control-label" for="terms">I Agree with <a href="#" data-toggle="modal"
                                 data-target="#exampleModal">Terms & Conditions</a>, <a href="#" data-toggle="modal"
                                 data-target="#exampleModal2">Privacy policy</a></label>
-                        >>>>>>> origin/main
+                        
                 </div>
 
                 <div class="pt-4 text-center">
@@ -116,6 +115,7 @@
             },
             phnumber: {
                 phone_num: true,
+                
             },
             password1: {
                 required: true,
@@ -123,6 +123,12 @@
             },
             password2: {
                 equalTo: "#id_password1"
+            },
+        },
+        messages: {
+            phnumber: {
+                required: "This field is required.",
+                phone_num: "Please enter valid phone number. Correct format is 04XXXXXXXX",
             },
         }
     });
@@ -208,5 +214,5 @@
 
 <!-- Facebook Pixel Code -->
 <noscript><img height="1" width="1" style="display:none"
-        src="https://www.facebook.com/tr?id=407869257116939&ev=PageView&noscript=1" /></noscript> {% endblock javascript
-%}
+        src="https://www.facebook.com/tr?id=407869257116939&ev=PageView&noscript=1" /></noscript> 
+        {% endblock javascript%}

@@ -144,7 +144,13 @@
                     required: true,
                     minlength: 3
                 },
-            }
+            },
+            messages: {
+                number: {
+                    required: "This field is required.",
+                    phone_num: "Please enter valid phone number. Correct format is 04XXXXXXXX",
+                },
+        }
           });
     });
 </script>

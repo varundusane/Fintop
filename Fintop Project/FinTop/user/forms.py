@@ -11,7 +11,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254)
     # phnumber = forms.CharField(label = "Phone Number",required=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Please enter valid phone number. Correct format is 04XXXXXXXX")
-    phnumber = forms.CharField(validators=[phone_regex], max_length=18,label ="Phone Number",required=True  )
+    phnumber = forms.CharField(validators=[phone_regex], max_length=18,label ="Phone Number",required=True)
 
 
     class Meta:
