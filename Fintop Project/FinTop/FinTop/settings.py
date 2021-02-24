@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'b$^9mhdrvvi4gfu0july04-x7=l^4_jtt#)u@fux1wr1&0i0v4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au']
 
@@ -82,9 +82,13 @@ WSGI_APPLICATION = 'FinTop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fintop_db',
+        'USER': 'fintop_admin',
+        'PASSWORD': 'ftdb_ad01',
+        'HOST': 'fintopdbproduction.ce5lyv6yhn3x.ap-southeast-2.rds.amazonaws.com',
+        'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET foreign_key_checks = 0;",
-            'read_default_file': '/etc/mysql/my.cnf',
     },
     }
 }
