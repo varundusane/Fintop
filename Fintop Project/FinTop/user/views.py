@@ -414,7 +414,7 @@ class ReferralListView(SingleTableView):
         }
 
         table = Referral.objects.all().filter(referred_by=user)
-        return render(request, 'dashboard/ref.html', {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
+        return render(request, 'dashboard/comingsoon.html', {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
 
     def post(self, request, *args, **kwargs):
         template_path = 'dashboard/ref.html'
