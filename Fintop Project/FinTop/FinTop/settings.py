@@ -82,17 +82,11 @@ WSGI_APPLICATION = 'FinTop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fintop_db',
-        'USER': 'fintop_admin',
-        'PASSWORD': 'ftdb_ad01',
-        'HOST': 'fintopdbproduction.ce5lyv6yhn3x.ap-southeast-2.rds.amazonaws.com',
-        'PORT': '3306',
-        'OPTIONS': {
-            "init_command": "SET foreign_key_checks = 0;",
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
+
 
 
 # Password validation
