@@ -1,5 +1,18 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from .forms import SignUpForm
+from django.views.generic import View, UpdateView
+from django.contrib.auth.models import User
+from django.http import HttpResponse, HttpResponseRedirect
+from user.tokens import account_activation_token
+from user.models import Referral, Profile
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from django.contrib import messages
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_text
+from django.contrib.auth import login
 # Create your views here.
 class SignUpView(View):
     form_class = SignUpForm
@@ -28,6 +41,7 @@ class SignUpView(View):
             else:
                 user = form.save(commit=False)
                 user.is_active = False  # Deactivate account till it is confirmed
+                user.is_agent = True
                 user.save()
                 reff = Referral(referred_by_id=uid, user_id=user.pk)
                 reff.save()
