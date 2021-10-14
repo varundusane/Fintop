@@ -18,7 +18,6 @@ mimetypes.add_type("text/css", ".css", True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,7 +27,7 @@ SECRET_KEY = 'b$^9mhdrvvi4gfu0july04-x7=l^4_jtt#)u@fux1wr1&0i0v4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au']
+ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au', '127.0.0.1', 'localhost']
 
 # Application definition
 INSTALLED_APPS = [
@@ -76,7 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FinTop.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -86,8 +84,6 @@ DATABASES = {
         'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -107,7 +103,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -120,7 +115,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -136,17 +130,16 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_root/")
 
-
 # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-EMAIL_BACKEND='django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST="smtp.zoho.com.au"
-EMAIL_PORT=465
-EMAIL_USE_SSL=True
-EMAIL_HOST_USER="mail@fintop.com.au"
-DEFAULT_FROM_EMAIL="Fintop <mail@fintop.com.au>"
-#EMAIL_HOST_PASSWORD="SL@Top1Day"
-EMAIL_HOST_PASSWORD="HHgcLSz4Ws9E"
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = "smtp.zoho.com.au"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = "mail@fintop.com.au"
+DEFAULT_FROM_EMAIL = "Fintop <mail@fintop.com.au>"
+# EMAIL_HOST_PASSWORD="SL@Top1Day"
+EMAIL_HOST_PASSWORD = "HHgcLSz4Ws9E"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/semantic.html"
 RECAPTCHA_SITE_KEY = "6LdI20kaAAAAAGwmzHCfyonzLr5blCL0LQGgmOfJ"
 RECAPTCHA_SECRET_KEY = "6LdI20kaAAAAALHuggfJT_ly4WtvT0CGZxaQLYWF"

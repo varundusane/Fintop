@@ -29,6 +29,7 @@ class Profile(models.Model):
     email_confirmed = models.BooleanField(default=False)
     is_bizpartner = models.BooleanField(default=False)
     is_agent = models.BooleanField(default=False)
+    kyc_done = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Profile Verification'

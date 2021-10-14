@@ -21,6 +21,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
 from user import urls as core_urls
+from agent import urls as a_urls
 from user.views import home
 from django.urls import re_path
 from django.conf import settings
@@ -30,6 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include(core_urls)),
+    path('agent/', include(core_urls)),
     re_path(r'^static/(?:.*)$', serve,
             {'document_root': settings.STATIC_ROOT, }),
     # re_path(r'^media/(?:.*)$', serve,

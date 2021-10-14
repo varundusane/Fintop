@@ -89,16 +89,37 @@ class dashboard(View):
 
     def get(self, request,  *args, **kwargs):
         user = self.request.user
+
         if request.user.is_anonymous:
             val = 0
+            return render(request, self.template_name)
         else:
-            verify = Verification.objects.filter(user=user)
-            val = verify.values('is_bizpartner')
-            if len(val) != 0:
-                val = val[0]['is_bizpartner']
+            pr = Profile.objects.get(user=user)
+            if pr.kyc_done:
+                verify = Verification.objects.filter(user=user)
+                val = verify.values('is_bizpartner')
+                if len(val) != 0:
+                    val = val[0]['is_bizpartner']
+                else:
+                    val = 0
+                return render(request, self.template_name)
             else:
-                val = 0
-        return render(request, self.template_name)
+                return redirect('kycForm')
+def KycForm(request):
+    user =request.user
+    try:
+        r =Referral.objects.get(user=user)
+    except Referral.DoesNotExit:
+        r=None
+    if r is None:
+        return HttpResponse('Form for user who came by google search')
+    else:
+        u =r.referred_by
+        pr =Profile.objects.get(user=u)
+        if pr.is_agent:
+            return HttpResponse('Form for user who came by refer of agent')
+        if pr.is_is_bizpartner:
+            return HttpResponse('Form for user who came by refer of customer')
 
 class SignUpView(View):
     form_class = SignUpForm
@@ -128,7 +149,15 @@ class SignUpView(View):
                 user = form.save(commit=False)
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
-                reff = Referral(referred_by_id=uid, user_id=user.pk)
+                u = User.objects.get(id=uid)
+                pr = Profile.objects.get(user=u)
+                if pr.is_agent:
+                    comm = 0
+                    comm_status = "done"
+                    reff = Referral(referred_by_id=uid, user_id=user.pk, commissions=comm,
+                                    commission_status=comm_status)
+                else:
+                    reff = Referral(referred_by_id=uid, user_id=user.pk)
                 reff.save()
                 ph = list(form.cleaned_data['phnumber'])
                 if ph[0] is "+":                    
