@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'b$^9mhdrvvi4gfu0july04-x7=l^4_jtt#)u@fux1wr1&0i0v4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au', '127.0.0.1', 'localhost']
 
@@ -120,12 +120,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 LOGIN_REDIRECT_URL = "/dashboard"
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+#below uncomment from 127 to 129 on prod for css and comment from 123 to 125
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_root/")
