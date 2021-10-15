@@ -1,13 +1,14 @@
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 from django.contrib.auth import login
-from django.core.mail import EmailMessage,EmailMultiAlternatives
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import View, UpdateView
-from user.forms import SignUpForm, ProfileForm, BusinessForm, BankInfoForm, LoanForm, AdditionalAssetsForm, AdditionalLiabilitiesForm, ProfileForms, ContactForm
+from user.forms import SignUpForm, ProfileForm, BusinessForm, BankInfoForm, LoanForm, AdditionalAssetsForm, \
+    AdditionalLiabilitiesForm, ProfileForms, ContactForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
@@ -16,7 +17,8 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from user.tokens import account_activation_token
-from user.models import Referral, Business, Verification, BankInfo, Loan, Profile, Additional_assets, Additional_liabilities, Contact
+from user.models import Referral, Business, Verification, BankInfo, Loan, Profile, Additional_assets, \
+    Additional_liabilities, Contact
 from django_tables2 import SingleTableView
 from .tables import ReferralTable
 from django import forms
@@ -29,7 +31,9 @@ from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 import requests
 from .utils import render_to_pdf
-#===== Landing page views ====#
+
+
+# ===== Landing page views ====#
 
 
 class home(View):
@@ -57,7 +61,7 @@ class loan(SingleTableView):
     redirect_field_name = 'redirect_to'
     template_name = 'dashboard/loan.html'
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         template_name = 'dashboard/loan.html'
         user = self.request.user
         table = Loan.objects.all().filter(user=user)
@@ -80,14 +84,15 @@ def ts(request):
 def PrivacyPolicy(request):
     return render(request, 'home/PrivacyPolicy.html', {})
 
-#===== Dashboard views ====#
+
+# ===== Dashboard views ====#
 
 
 class dashboard(View):
     login_url = '/login/'
     template_name = 'dashboard/index.html'
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         user = self.request.user
 
         if request.user.is_anonymous:
@@ -105,21 +110,24 @@ class dashboard(View):
                 return render(request, self.template_name)
             else:
                 return redirect('kycForm')
+
+
 def KycForm(request):
-    user =request.user
+    user = request.user
     try:
-        r =Referral.objects.get(user=user)
+        r = Referral.objects.get(user=user)
     except Referral.DoesNotExit:
-        r=None
+        r = None
     if r is None:
         return HttpResponse('Form for user who came by google search')
     else:
-        u =r.referred_by
-        pr =Profile.objects.get(user=u)
+        u = r.referred_by
+        pr = Profile.objects.get(user=u)
         if pr.is_agent:
             return HttpResponse('Form for user who came by refer of agent')
-        if pr.is_is_bizpartner:
+        if pr.is_bizpartner:
             return HttpResponse('Form for user who came by refer of customer')
+
 
 class SignUpView(View):
     form_class = SignUpForm
@@ -132,12 +140,12 @@ class SignUpView(View):
         # link = request.GET.get('ref=', None)
         return render(request, self.template_name, {'form': form, 'uid': uid})
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         print(User.objects.all())
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, uid,  *args, **kwargs):
+    def post(self, request, uid, *args, **kwargs):
         form = self.form_class(request.POST)
 
         if form.is_valid():
@@ -160,19 +168,19 @@ class SignUpView(View):
                     reff = Referral(referred_by_id=uid, user_id=user.pk)
                 reff.save()
                 ph = list(form.cleaned_data['phnumber'])
-                if ph[0] is "+":                    
+                if ph[0] is "+":
                     phnumber = ''.join(map(str, ph))
-                else:    
+                else:
                     if ph[0] is "0":
                         ph.pop(0)
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+")
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                     else:
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+") 
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                 new_profile = Profile(
                     user=user, phnumber=phnumber, email_confirmed=False)
@@ -188,7 +196,7 @@ class SignUpView(View):
                 user.email_user(subject, message)
                 messages.success(
                     request, ('Please check your mail for complete registration.'))
-            # return redirect('login')
+                # return redirect('login')
                 return render(request, self.template_name, {'form': form})
         else:
             return render(request, self.template_name, {'form': form})
@@ -205,9 +213,9 @@ class ActivateAccount(View):
 
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
-            
+
             pr = Profile.objects.get(user=user)
-            pr.email_confirmed=True
+            pr.email_confirmed = True
             pr.save()
             user.save()
             login(request, user)
@@ -217,6 +225,7 @@ class ActivateAccount(View):
             messages.warning(
                 request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('dashboard_home')
+
 
 # Edit Profile View
 # @login_required(login_url='/login/')
@@ -239,27 +248,27 @@ def ProfileView(request, pk):
     if request.method == 'POST':
         form1 = ProfileForm(request.POST, instance=User.objects.get(id=pk))
         if form1.is_valid():
-            
+
             form1.save()
             form2 = ProfileForms(request.POST, instance=profile)
 
             if form2.is_valid():
                 ph = list(form2.cleaned_data['phnumber'])
-                if ph[0] is "+":                    
+                if ph[0] is "+":
                     phnumber = ''.join(map(str, ph))
-                else:    
+                else:
                     if ph[0] is "0":
                         ph.pop(0)
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+")
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                     else:
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+") 
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
-                
+
                 form2.save()
                 profile.phnumber = phnumber
                 profile.save()
@@ -289,7 +298,7 @@ class SignUpVieww(View):
         # link = request.GET.get('ref=', None)
         return render(request, self.template_name, {'form': form, 'uid': uid})
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -303,22 +312,22 @@ class SignUpVieww(View):
 
                 return HttpResponse('User with same email already exists, Please try again with different Username!!')
             else:
-                
+
                 user = form.save(commit=False)
                 ph = list(form.cleaned_data['phnumber'])
-                if ph[0] is "+":                    
+                if ph[0] is "+":
                     phnumber = ''.join(map(str, ph))
-                else:    
+                else:
                     if ph[0] is "0":
                         ph.pop(0)
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+")
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                     else:
-                        ph.insert(0,"1")
-                        ph.insert(0,"6")
-                        ph.insert(0,"+") 
+                        ph.insert(0, "1")
+                        ph.insert(0, "6")
+                        ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
@@ -338,7 +347,7 @@ class SignUpVieww(View):
                 messages.success(
                     request, ('Please check your mail for complete registration.'))
 
-            # return redirect('login')
+                # return redirect('login')
 
                 return render(request, self.template_name, {'form': form})
         else:
@@ -351,9 +360,10 @@ class write_pdf_view(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
     template_name = 'dashboard/business.html'
+
     # def write_pdf_vieww(request):
 
-    def get(self, request,  *args, **kwargs):     
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -361,7 +371,7 @@ class write_pdf_view(LoginRequiredMixin, View):
         template_path = 'commons/agreement.html'
         form = self.form_class(request.POST)
         user = self.request.user
-        
+
         #
 
         if form.is_valid():
@@ -374,7 +384,7 @@ class write_pdf_view(LoginRequiredMixin, View):
             if Business.objects.filter(user=user).exists():
 
                 return messages.success(request, 'You are already a BizPartner !!')
-            else:    
+            else:
                 bn = form.save(commit=False)
 
                 bn.user = user
@@ -382,28 +392,31 @@ class write_pdf_view(LoginRequiredMixin, View):
                 response['Content-Disposition'] = 'filename="agreement.pdf"'
                 fname = request.POST["fullname"]
                 sign = request.POST["signature"]
-                bn = Business (user=user, fullname=fname, signature=sign)
+                bn = Business(user=user, fullname=fname, signature=sign)
 
                 bn.save()
-                bn= Business.objects.get(user=user)
+                bn = Business.objects.get(user=user)
                 bn.generate_obj_pdf()
-                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'w+b')
-                
+                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)), f"agreement/{user.username}.pdf"),
+                           'w+b')
+
                 context = {'fname': fname, 'sign': sign, 'ip': ip}
                 template = get_template(template_path)
                 html = template.render(context)
                 pisa_status = pisa.CreatePDF(html, dest=response)
                 pisa_status = pisa.CreatePDF(html, dest=fil)
                 fil.close()
-                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)),f"agreement/{user.username}.pdf"), 'r+')
+                fil = open(os.path.join(os.path.dirname(os.path.dirname(__file__)), f"agreement/{user.username}.pdf"),
+                           'r+')
                 urll = (os.path.realpath(fil.name))
                 to_emails = [user.email, settings.EMAIL_HOST_USER]
                 subject = "FinTop Agreement"
-                
+
                 email = EmailMessage(
-                    subject, "Congratulations You are Successfully Registered as a BizPartner.", from_email=settings.EMAIL_HOST_USER, to=to_emails)
+                    subject, "Congratulations You are Successfully Registered as a BizPartner.",
+                    from_email=settings.EMAIL_HOST_USER, to=to_emails)
                 email.attach_file(urll)
-            
+
                 email.send()
                 fil.close()
                 if Verification.objects.filter(user=user, is_bizpartner=1).exists():
@@ -443,7 +456,8 @@ class ReferralListView(SingleTableView):
         }
 
         table = Referral.objects.all().filter(referred_by=user)
-        return render(request, 'dashboard/comingsoon.html', {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
+        return render(request, 'dashboard/comingsoon.html',
+                      {'val': val, 'table': table, 'form': form, 'formdetails': formdetails})
 
     def post(self, request, *args, **kwargs):
         template_path = 'dashboard/ref.html'
@@ -455,7 +469,6 @@ class ReferralListView(SingleTableView):
             form = self.form_class(request.POST)
         user = self.request.user
         if form.is_valid():
-
             bn = form.save(commit=False)
             bn.user_id = user
             bn.save()
@@ -470,7 +483,7 @@ class bank(View):
     redirect_field_name = 'redirect_to'
     template_name = 'dashboard/bank.html'
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         user = self.request.user
         if request.user.is_anonymous:
@@ -490,7 +503,6 @@ class bank(View):
         user = self.request.user
 
         if form.is_valid():
-      
             bn = form.save(commit=False)
             bn.user_id = user
             bn.save()
@@ -505,11 +517,12 @@ class applyloan(View):
     redirect_field_name = 'redirect_to'
     template_name = 'dashboard/applyloan.html'
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         user = self.request.user
 
-        return render(request, self.template_name, {'loan': LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm})
+        return render(request, self.template_name,
+                      {'loan': LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm})
 
     def post(self, request, *args, **kwargs):
         template_path = 'dashboard/loan.html'
@@ -520,14 +533,14 @@ class applyloan(View):
 
             bn = form.save(commit=False)
             bn.user_id = user.pk
-         
+
             bn.save()
 
             td = request.POST.get('td', None)
             share = request.POST.get('share', None)
             mf = request.POST.get('mf', None)
             gifts = request.POST.get('gifts', None)
-            
+
             liabilitys = request.POST.get('liability_loan', None)
             print("liabilitys", liabilitys)
             if td:
@@ -575,27 +588,27 @@ class contact(View):
     form_class = ContactForm
     template_name = 'home/contact_us.html'
 
-    def get(self, request,  *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            
-    #         data = {}
-    #         secret_key = settings.RECAPTCHA_SECRET_KEY
 
-    # # captcha verification
-    #         data = {
-    #             'response': data.get('g-recaptcha-response'),
-    #             'secret': secret_key
-    #         }
-    #         resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-    #         result_json = resp.json()
-    #     if not result_json.get('success'):
-    #         return HttpResponseRedirect(reverse('contact_us'))
-    #     else :
+            #         data = {}
+            #         secret_key = settings.RECAPTCHA_SECRET_KEY
+
+            # # captcha verification
+            #         data = {
+            #             'response': data.get('g-recaptcha-response'),
+            #             'secret': secret_key
+            #         }
+            #         resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            #         result_json = resp.json()
+            #     if not result_json.get('success'):
+            #         return HttpResponseRedirect(reverse('contact_us'))
+            #     else :
             bn = form.save(commit=False)
             # to_emails =  [settings.EMAIL_HOST_USER]
             # message = [request.POST["email"], request.POST["message"]]
@@ -605,23 +618,21 @@ class contact(View):
             # email.encoding = 'utf-8'
             # email.send()
             ph = list(form.cleaned_data['number'])
-            if ph[0] is "+":                    
+            if ph[0] is "+":
                 phnumber = ''.join(map(str, ph))
-            else:    
+            else:
                 if ph[0] is "0":
                     ph.pop(0)
-                    ph.insert(0,"1")
-                    ph.insert(0,"6")
-                    ph.insert(0,"+")
+                    ph.insert(0, "1")
+                    ph.insert(0, "6")
+                    ph.insert(0, "+")
                     phnumber = ''.join(map(str, ph))
                 else:
-                    ph.insert(0,"1")
-                    ph.insert(0,"6")
-                    ph.insert(0,"+") 
+                    ph.insert(0, "1")
+                    ph.insert(0, "6")
+                    ph.insert(0, "+")
                     phnumber = ''.join(map(str, ph))
-            
-            bn.save(number=phnumber)
 
-            
+            bn.save(number=phnumber)
 
         return HttpResponseRedirect(reverse('contact_us'))

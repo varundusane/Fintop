@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f62d2ea0-a754-4164-8bb5-4f4a826ad5c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/FinTop/user/templates/account/login_agent.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FinTop/user/templates/account/signup_agent.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/FinTop/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/FinTop/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/FinTop/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/FinTop/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/agent/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/agent/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/agent/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/agent/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/user/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinTop/user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FinTop/user/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,21 +52,29 @@
       <option name="project" value="LOCAL" />
       <updated>1633886620936</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refer commission distribution">
+      <created>1634188884583</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1634188884583</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="agent signup view" />
-    <option name="LAST_COMMIT_MESSAGE" value="agent signup view" />
+    <MESSAGE value="Refer commission distribution" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refer commission distribution" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="395" y="85" key="CommitChangelistDialog2" timestamp="1633886619857">
+    <state x="395" y="85" key="CommitChangelistDialog2" timestamp="1634188882571">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="395" y="85" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1633886619857" />
-    <state x="361" y="150" key="Vcs.Push.Dialog.v2" timestamp="1633886625104">
+    <state x="395" y="85" key="CommitChangelistDialog2/0.0.1536.834@0.0.1536.834" timestamp="1634188882571" />
+    <state x="361" y="150" key="Vcs.Push.Dialog.v2" timestamp="1634188887114">
       <screen x="0" y="0" width="1536" height="834" />
     </state>
-    <state x="361" y="150" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1633886625104" />
+    <state x="361" y="150" key="Vcs.Push.Dialog.v2/0.0.1536.834@0.0.1536.834" timestamp="1634188887114" />
   </component>
 </project>
