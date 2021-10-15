@@ -18,7 +18,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from user.tokens import account_activation_token
 from user.models import Referral, Business, Verification, BankInfo, Loan, Profile, Additional_assets, \
-    Additional_liabilities, Contact
+    Additional_liabilities, Contact, Underprocess_loans
 from django_tables2 import SingleTableView
 from .tables import ReferralTable
 from django import forms
@@ -577,6 +577,10 @@ class applyloan(View):
                 add_liabilities.save()
             print('===>', td)
             td_total_value = request.POST['td_total_value']
+            r = Referral.objects.get(user=user)
+            pr = r.referred_by
+            if pr.is_agent:
+                Underprocess_loans.objects.create(loan_id=bn.pk, agent=pr.pk).save()
             # AdditionalAssets()
         # table = Loan.objects.all().filter(user=user)
         # return render(request, 'dashboard/loan.html', {'loan':LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm, 'table': table})
