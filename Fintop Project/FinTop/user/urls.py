@@ -1,7 +1,10 @@
 from django.urls import include, path
-from user.views import SignUpView, ProfileView, ActivateAccount, ReferralListView, SignUpVieww, ts, PrivacyPolicy, write_pdf_view, loan, prf, bank, success, dashboard, agreement, applyloan, contact
+from user.views import SignUpView, ProfileView, ActivateAccount, ReferralListView, SignUpVieww, ts, PrivacyPolicy, \
+    write_pdf_view, loan, prf, bank, success, dashboard, agreement, applyloan, contact, KycForm, login_user
 from . import views
 from django.contrib.auth import views as auth_views  # import this
+
+app_name = 'User'
 urlpatterns = [
     ##=== home routes ===##
 
@@ -13,7 +16,8 @@ urlpatterns = [
     path('agreement', views.agreement, name='agreement'),
 
     ##=== account routes ===##
-
+    path('login/', login_user, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='User:home'), name='logout'),
     path('signup', SignUpVieww.as_view(), name='signup'),
     path('signup/ref=<uid>', SignUpView.as_view(), name='ref'),
     path('reset_password/', auth_views.PasswordResetView.as_view(
@@ -44,7 +48,7 @@ urlpatterns = [
 
         path('biz/<int:pk>', ProfileView, name='biz'),
 
-        path('agreement', views.agreement, name='agreement'), 
+        path('agreement', views.agreement, name='agreement'),
 
         # path('profile', views.prf, name='profile1'),
 
@@ -52,5 +56,6 @@ urlpatterns = [
 
         path('success', views.success, name='success'),
         path('applyloan', applyloan.as_view(), name='applyloan'),
+        path('kyc/', KycForm, name='kyc'),
     ])),
 ]

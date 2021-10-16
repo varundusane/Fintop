@@ -16,6 +16,7 @@ urlpatterns = [
     path('account/reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(
         template_name='account/password_reset_complete.html'), name='password_reset_complete'),
     path('login/', login_agent, name='login_agent'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('/', agent_dashboard, name='agent_home'),
     path('kyc/', KycForm, name='kyc'),
 ]

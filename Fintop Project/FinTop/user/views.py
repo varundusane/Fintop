@@ -1,6 +1,6 @@
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -109,7 +109,7 @@ class dashboard(View):
                     val = 0
                 return render(request, self.template_name)
             else:
-                return redirect('kycForm')
+                return redirect('User:kycForm')
 
 
 def KycForm(request):
@@ -128,7 +128,36 @@ def KycForm(request):
         if pr.is_bizpartner:
             return HttpResponse('Form for user who came by refer of customer')
 
+def login_user(request):
+    pr = Profile.objects.get(user=request.user)
+    if request.user.is_authenticated and pr.is_agent:
+        print(request.user)
+        return redirect('User:home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('pass')
 
+            # print(username)
+            # print(password)
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                pr = Profile.objects.get(user=user)
+                if pr.is_agent is False:
+                    login(request, user)
+                    if 'next' in request.POST:
+                        return redirect(request.POST.get('next'))
+                    else:
+                        return redirect('User:home')
+                else:
+                    messages.info(request, 'This Agent Login')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
+
+        context = {}
+
+        return render(request, 'account/login.html', context)
 class SignUpView(View):
     form_class = SignUpForm
 
@@ -220,11 +249,11 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             messages.success(request, ('Your account have been confirmed.'))
-            return redirect('dashboard_home')
+            return redirect('User:dashboard_home')
         else:
             messages.warning(
                 request, ('The confirmation link was invalid, possibly because it has already been used.'))
-            return redirect('dashboard_home')
+            return redirect('User:dashboard_home')
 
 
 # Edit Profile View
@@ -584,7 +613,7 @@ class applyloan(View):
             # AdditionalAssets()
         # table = Loan.objects.all().filter(user=user)
         # return render(request, 'dashboard/loan.html', {'loan':LoanForm, 'asset': AdditionalAssetsForm, 'liability': AdditionalLiabilitiesForm, 'table': table})
-        return redirect('loan')
+        return redirect('User:loan')
 
 
 class contact(View):
@@ -639,4 +668,4 @@ class contact(View):
 
             bn.save(number=phnumber)
 
-        return HttpResponseRedirect(reverse('contact_us'))
+        return HttpResponseRedirect(reverse('User:contact_us'))

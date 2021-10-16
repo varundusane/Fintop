@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
-                            <a href="{% url 'dashboard_home' %}" class="link-effect">Home</a>
+                            <a href="{% url 'User:dashboard_home' %}" class="link-effect">Home</a>
                         </li>
                         <li class="breadcrumb-item active">Business Partner Details</li>
                     </ol>
@@ -37,7 +37,7 @@
                         <h4>
                             You are not a FinTop Business Partner and are not eligible for any commission Payments.
                         </h4>
-                        <a href="{% url 'Business' %}" class="link-effect" style="color: inherit;text-decoration: unset;">Click here</a> to become a <b>Business Partner</b>
+                        <a href="{% url 'User:Business' %}" class="link-effect" style="color: inherit;text-decoration: unset;">Click here</a> to become a <b>Business Partner</b>
                     </div>
                     {% else %}
                     <h3>Bank Details</h3>

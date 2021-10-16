@@ -185,7 +185,7 @@ def login_agent(request):
     pr = Profile.objects.get(user=request.user)
     if request.user.is_authenticated and pr.is_agent:
         print(request.user)
-        return redirect('jobseeker:jobseeker_home')
+        return redirect('agent:agent_home')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')

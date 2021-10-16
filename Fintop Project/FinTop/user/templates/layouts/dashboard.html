@@ -86,20 +86,20 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                         <li class="nav-item">
-                            <a href="{% url 'dashboard_home' %}" class="nav-link" id="nav-home">
+                            <a href="{% url 'User:dashboard_home' %}" class="nav-link" id="nav-home">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
 
                         <li class="nav-item ">
-                            <a href="{% url 'referral' %}" class="nav-link" id="nav-referral">
+                            <a href="{% url 'User:referral' %}" class="nav-link" id="nav-referral">
                                 <i class="nav-icon fas fa-user-secret"></i>
                                 <p>BizPartner Details</p>
                             </a>
                         </li>
                         <li class="nav-item ">
-                            <a href="{% url 'loan' %}" class="nav-link" id="nav-loan">
+                            <a href="{% url 'User:loan' %}" class="nav-link" id="nav-loan">
                                 <i class="nav-icon fas fa-piggy-bank"></i>
                                 <p>My Loans</p>
                             </a>
@@ -107,13 +107,13 @@
 
                         <li class="nav-header">Settings</li>
                         <li class="nav-item">
-                            <a href="{% url 'profile' user.id %}" class="nav-link" id="nav-profile">
+                            <a href="{% url 'User:profile' user.id %}" class="nav-link" id="nav-profile">
                                 <i class="fas fa-user nav-icon"></i>
                                 <p>My Profile</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'logout' %}" class="nav-link" id="nav-logout">
+                            <a href="{% url 'User:logout' %}" class="nav-link" id="nav-logout">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>Logout</p>
                             </a>
