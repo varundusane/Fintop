@@ -132,7 +132,7 @@ def login_user(request):
     pr = Profile.objects.get(user=request.user)
     if request.user.is_authenticated and pr.is_agent:
         print(request.user)
-        return redirect('User:home')
+        return redirect('home')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -149,7 +149,7 @@ def login_user(request):
                     if 'next' in request.POST:
                         return redirect(request.POST.get('next'))
                     else:
-                        return redirect('User:home')
+                        return redirect('home')
                 else:
                     messages.info(request, 'This Agent Login')
             else:
