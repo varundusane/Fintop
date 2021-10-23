@@ -62,7 +62,7 @@ class SignUpVieww(View):
                 user.is_active = False  # Deactivate account till it is confirmed
                 user.save()
                 new_profile = Profile(
-                    user=user, phnumber=phnumber, email_confirmed=False)
+                    user=user, phnumber=phnumber, email_confirmed=False,is_agent =True)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -72,7 +72,7 @@ class SignUpVieww(View):
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'token': account_activation_token.make_token(user),
                 })
-                user.email_user(subject, message)
+                # user.email_user(subject, message)
 
                 messages.success(
                     request, ('Please check your mail for complete registration.'))
@@ -136,7 +136,7 @@ class SignUpView(View):
                         ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
                 new_profile = Profile(
-                    user=user, phnumber=phnumber, email_confirmed=False)
+                    user=user, phnumber=phnumber, email_confirmed=False, is_agent=True)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -182,19 +182,20 @@ class ActivateAccount(View):
 
 
 def login_agent(request):
-    pr = Profile.objects.get(user=request.user)
-    if request.user.is_authenticated and pr.is_agent:
-        print(request.user)
-        return redirect('agent:agent_home')
+    if request.user.is_authenticated:
+        pr = Profile.objects.get(user=request.user)
+        if pr.is_agent:
+            print(request.user)
+            return redirect('agent:agent_home')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('pass')
 
-            # print(username)
-            # print(password)
+            print(username)
+            print(password)
             user = authenticate(request, username=username, password=password)
-
+            print(user)
             if user is not None:
                 pr = Profile.objects.get(user=user)
                 if pr.is_agent:
@@ -219,7 +220,7 @@ def agent_dashboard(request):
     if pr.kyc_done:
         return HttpResponse('hello world')
     else:
-        return redirect('kycForm')
+        return redirect('agent:kyc')
 
 
 def KycForm(request):

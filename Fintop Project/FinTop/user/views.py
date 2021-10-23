@@ -109,14 +109,14 @@ class dashboard(View):
                     val = 0
                 return render(request, self.template_name)
             else:
-                return redirect('User:kycForm')
+                return redirect('User:kyc')
 
 
 def KycForm(request):
     user = request.user
     try:
         r = Referral.objects.get(user=user)
-    except Referral.DoesNotExit:
+    except Referral.DoesNotExist:
         r = None
     if r is None:
         return HttpResponse('Form for user who came by google search')
@@ -129,10 +129,12 @@ def KycForm(request):
             return HttpResponse('Form for user who came by refer of customer')
 
 def login_user(request):
-    pr = Profile.objects.get(user=request.user)
-    if request.user.is_authenticated and pr.is_agent:
-        print(request.user)
-        return redirect('home')
+
+    if request.user.is_authenticated:
+        pr = Profile.objects.get(user=request.user)
+        if pr.is_agent is False:
+            print(request.user)
+            return redirect('home')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')

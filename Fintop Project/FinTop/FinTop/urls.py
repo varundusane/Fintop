@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include(core_urls)),
-    path('agent/', include(core_urls)),
+    path('agent/', include(a_urls)),
     re_path(r'^static/(?:.*)$', serve,
             {'document_root': settings.STATIC_ROOT, }),
     # re_path(r'^media/(?:.*)$', serve,

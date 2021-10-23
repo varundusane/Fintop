@@ -174,7 +174,8 @@
                     </nav>
                     <!-- .nav-menu -->
                     {% if user.is_authenticated %} {% else %}
-                    <a href="{% url 'User:login' %}" class="get-started-btn">Register/Login</a> {% endif %}
+                    <a href="{% url 'User:login' %}" class="get-started-btn">Register/Login</a>
+                    <a href="{% url 'agent:login_agent' %}" class="get-started-btn">agent/Login</a>{% endif %}
                 </div>
             </div>
 
