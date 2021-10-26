@@ -59,7 +59,8 @@ class SignUpVieww(View):
                         ph.insert(0, "6")
                         ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
-                user.is_active = False  # Deactivate account till it is confirmed
+                user.is_active = True  # Deactivate account till it is confirmed
+                user.is_agent = True
                 user.save()
                 new_profile = Profile(
                     user=user, phnumber=phnumber, email_confirmed=False,is_agent =True)
@@ -110,7 +111,7 @@ class SignUpView(View):
                 return HttpResponse('User with same email already exists, Please try again with different Username!!')
             else:
                 user = form.save(commit=False)
-                user.is_active = False  # Deactivate account till it is confirmed
+                user.is_active = True  # Deactivate account till it is confirmed
                 user.is_agent = True
                 user.save()
 
@@ -146,7 +147,7 @@ class SignUpView(View):
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'token': account_activation_token.make_token(user),
                 })
-                user.email_user(subject, message)
+                # user.email_user(subject, message)
                 messages.success(
                     request, ('Please check your mail for complete registration.'))
                 # return redirect('login')
