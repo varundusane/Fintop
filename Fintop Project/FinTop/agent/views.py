@@ -231,7 +231,7 @@ def KycForm(request):
         f2 = KycFormprimary(request.POST or request.FILES)
         f3 = KycFormsecondary(request.POST or request.FILES)
         f4 = KycMemberForm(request.POST or request.FILES)
-        print(f2.data,f2.files)
+        print(f2.data, f2.files)
         if f1.is_valid():
             print("f1 is valid")
             f1.save()
@@ -259,6 +259,9 @@ def KycForm(request):
             fo4 = f4.save(commit=False)
             fo4.kyc = f1
             fo4.save()
+        pr = Profile.objects.get(user=request.user)
+        pr.kyc_done = True
+        pr.save()
         return redirect('agent:agent_home')
 
     f1 = KYCForm()
