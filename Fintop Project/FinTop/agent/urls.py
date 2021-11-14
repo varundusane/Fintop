@@ -19,4 +19,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('/', agent_dashboard, name='agent_home'),
     path('kyc/', KycForm, name='kyc'),
+
 ]

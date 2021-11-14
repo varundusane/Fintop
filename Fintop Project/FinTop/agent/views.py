@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 from django.contrib.auth import login, authenticate
+from .forms import KYCForm, KycFormprimary, KycFormsecondary, KycMemberForm
 
 
 # Create your views here.
@@ -63,7 +64,7 @@ class SignUpVieww(View):
                 user.is_agent = True
                 user.save()
                 new_profile = Profile(
-                    user=user, phnumber=phnumber, email_confirmed=False,is_agent =True)
+                    user=user, phnumber=phnumber, email_confirmed=False, is_agent=True)
                 new_profile.save()
                 current_site = get_current_site(request)
                 subject = 'Activate Your FinTop Account'
@@ -219,10 +220,49 @@ def agent_dashboard(request):
     user = request.user
     pr = Profile.objects.get(user=user)
     if pr.kyc_done:
-        return HttpResponse('hello world')
+        return HttpResponse('Agent kyc is done')
     else:
         return redirect('agent:kyc')
 
 
 def KycForm(request):
-    return HttpResponse('kycForm for agent ')
+    if request.method == 'POST':
+        f1 = KYCForm(request.POST)
+        f2 = KycFormprimary(request.POST or request.FILES)
+        f3 = KycFormsecondary(request.POST or request.FILES)
+        f4 = KycMemberForm(request.POST or request.FILES)
+        print(f2.data,f2.files)
+        if f1.is_valid():
+            print("f1 is valid")
+            f1.save()
+
+        if f2.is_valid():
+            print('f2 is valid')
+            fo2 = f2.save(commit=False)
+            fo2.kyc = f1
+            if fo2.name_of_document == 'Foreign Passport (current)' | 'Australian Passport (current or expired within last 2 years but not cancelled)' | 'Australian Citizenship Certificate' | 'Full Birth certificate (not birth certificate extract)' | 'Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia':
+                fo2.points = 70
+            else:
+                fo2.points = 40
+            fo2.save()
+        if f3.is_valid():
+            fo3 = f3.save(commit=False)
+            fo3.kyc = f1
+            if fo3.name_of_document == 'Department of Veterans Affairs (DVA) card' | 'Centrelink card (with reference number)':
+                fo3.points = 40
+            elif fo3.name_of_document == 'Utility Bill - electricity, gas, telephone - Current address (less than 12 months old)' | 'Reference from Indigenous Organisation' | 'Documents issued outside Australia (equivalent to Australian documents).Must have official translation attached':
+                fo3.points = 20
+            else:
+                fo3.points = 25
+            fo3.save()
+        if f4.is_valid():
+            fo4 = f4.save(commit=False)
+            fo4.kyc = f1
+            fo4.save()
+        return redirect('agent:agent_home')
+
+    f1 = KYCForm()
+    f2 = KycFormprimary()
+    f3 = KycFormsecondary()
+    f4 = KycMemberForm()
+    return render(request, 'kyc/agent.html', {'f1': f1, 'f2': f2, "f3": f3, 'f4': f4})

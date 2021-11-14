@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['fintop.com.au', 'www.fintop.com.au', '127.0.0.1', 'localhost']
 INSTALLED_APPS = [
     'django_extensions',
     'user',
+    'agent',
     'crispy_forms',
     'bootstrapform',
     'django_tables2',

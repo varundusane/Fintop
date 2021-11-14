@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data">
+
+{% endif %}
+    {% csrf_token %}
+    {{f1.as_p}}
+    {{f2.as_p}}
+    {{f3.as_p}}
+    {{f4.as_p}}
+    <input type="submit" value="Create" />
+</form>
+</body>
+</html>
