@@ -1,6 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
-
+from django.contrib.auth.models import User
 primary_document = (
     ('Foreign Passport (current)', 'Foreign Passport (current)'),
     ('Australian Passport (current or expired within last 2 years but not cancelled)',
@@ -64,6 +64,7 @@ secondary_document = (
 
 # Create your models here.
 class Kyc(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     agentId = models.CharField(max_length=50)
     email = models.EmailField()
@@ -83,9 +84,9 @@ class Kyc_primary_police(models.Model):
 
 class Kyc_secondary_police(models.Model):
     kyc = models.ForeignKey(Kyc, on_delete=models.CASCADE)
-    name_of_document = models.CharField(max_length=150,choices=secondary_document)
+    name_of_Sdocument = models.CharField(max_length=150,choices=secondary_document)
     points = models.IntegerField()
-    document = models.FileField(upload_to="AgentKycDocument/")
+    Sdocument = models.FileField(upload_to="AgentKycDocument/")
 
 
 class Kyc_member(models.Model):

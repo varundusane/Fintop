@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
+
 from .forms import SignUpForm
 from django.views.generic import View, UpdateView
 from django.contrib.auth.models import User
@@ -14,7 +16,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 from django.contrib.auth import login, authenticate
 from .forms import KYCForm, KycFormprimary, KycFormsecondary, KycMemberForm
-
+from .models import Kyc
 
 # Create your views here.
 
@@ -228,36 +230,60 @@ def agent_dashboard(request):
 def KycForm(request):
     if request.method == 'POST':
         f1 = KYCForm(request.POST)
-        f2 = KycFormprimary(request.POST or request.FILES)
-        f3 = KycFormsecondary(request.POST or request.FILES)
-        f4 = KycMemberForm(request.POST or request.FILES)
-        print(f2.data, f2.files)
+        f2 = KycFormprimary(request.POST or None, request.FILES or None)
+        f3 = KycFormsecondary(request.POST or None, request.FILES or None)
+        f4 = KycMemberForm(request.POST or None, request.FILES or None)
+        print(f2.files)
+        try:
+            f2_document = request.FILES['document']
+        except MultiValueDictKeyError:
+            f2_document = False
+        try:
+            f3_document = request.FILES['Sdocument']
+        except MultiValueDictKeyError:
+            f3_document = False
+        try:
+            f4_document = request.FILES['Diploma_certificate']
+        except MultiValueDictKeyError:
+            f4_document = False
+        print(f2_document,f3_document,f4_document)
+        user = request.user
         if f1.is_valid():
-            print("f1 is valid")
-            f1.save()
 
+            print("f1 is valid")
+            fo1=f1.save(commit=False)
+            fo1.user=user
+            fo1.save()
         if f2.is_valid():
-            print('f2 is valid')
-            fo2 = f2.save(commit=False)
-            fo2.kyc = f1
-            if fo2.name_of_document == 'Foreign Passport (current)' | 'Australian Passport (current or expired within last 2 years but not cancelled)' | 'Australian Citizenship Certificate' | 'Full Birth certificate (not birth certificate extract)' | 'Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia':
-                fo2.points = 70
+
+        # if f2_document:
+        #     print('f2 is valid')
+        #     fo2 = f2.data['name_of_document']
+        #     print(fo2)
+            foo2 = f2.save(commit=False)
+            fu = Kyc.objects.get(user=user)
+            foo2.kyc = fu
+            # foo2.document=fo2
+            if foo2.name_of_document == 'Foreign Passport (current)' or 'Australian Passport (current or expired within last 2 years but not cancelled)' or 'Australian Citizenship Certificate' or 'Full Birth certificate (not birth certificate extract)' or 'Certificate of Identity issued by the Australian Government to refugees and non Australian citizens for entry to Australia':
+                foo2.points = 70
             else:
-                fo2.points = 40
-            fo2.save()
+                foo2.points = 40
+            foo2.save()
         if f3.is_valid():
             fo3 = f3.save(commit=False)
-            fo3.kyc = f1
-            if fo3.name_of_document == 'Department of Veterans Affairs (DVA) card' | 'Centrelink card (with reference number)':
+            fu = Kyc.objects.get(user=user)
+            fo3.kyc = fu
+            if fo3.name_of_Sdocument == 'Department of Veterans Affairs (DVA) card' or 'Centrelink card (with reference number)':
                 fo3.points = 40
-            elif fo3.name_of_document == 'Utility Bill - electricity, gas, telephone - Current address (less than 12 months old)' | 'Reference from Indigenous Organisation' | 'Documents issued outside Australia (equivalent to Australian documents).Must have official translation attached':
+            elif fo3.name_of_Sdocument == 'Utility Bill - electricity, gas, telephone - Current address (less than 12 months old)' or 'Reference from Indigenous Organisation' or 'Documents issued outside Australia (equivalent to Australian documents).Must have official translation attached':
                 fo3.points = 20
             else:
                 fo3.points = 25
             fo3.save()
         if f4.is_valid():
             fo4 = f4.save(commit=False)
-            fo4.kyc = f1
+            fu = Kyc.objects.get(user=user)
+            fo4.kyc = fu
             fo4.save()
         pr = Profile.objects.get(user=request.user)
         pr.kyc_done = True

@@ -54,10 +54,10 @@ class KycFormprimary(forms.ModelForm):
 
 class KycFormsecondary(forms.ModelForm):
     class Meta:
-        model = Kyc_primary_police
+        model = Kyc_secondary_police
         fields = [
-            'name_of_document',
-            'document'
+            'name_of_Sdocument',
+            'Sdocument'
         ]
 class KycMemberForm(forms.ModelForm):
     class Meta:
