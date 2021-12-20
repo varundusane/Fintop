@@ -1,0 +1,87 @@
+{% extends 'layouts/agentDashboard.html' %} {% block title %} Page Title {% endblock title %} {% block content %} {% load static %} {% load crispy_forms_tags %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Page name</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'User:dashboard_home' %}" class="link-effect">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Page name</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <form method="post" enctype="multipart/form-data">
+
+
+                {% csrf_token %}
+                <div>{{f1.name.label}}:</div>
+                <div>{{f1.name}}</div>
+                <div>{{f1.agentId.label}}:</div>
+                <div>{{f1.agentId}}</div>
+                <div>{{f1.email.label}}:</div>
+                <div>{{f1.email}}</div>
+                <div>{{f1.phone.label}}:</div>
+                <div>{{f1.phone}}</div>
+                <div>{{f1.residential_Address.label}}:</div>
+                <div>{{f1.residential_Address}}</div>
+                <div>{{f1.communication_address.label}}:</div>
+                <div>{{f1.communication_address}}</div>
+                <div>{{f2.name_of_document.label}}:</div>
+                <div>{{f2.name_of_document}}</div>
+                <div>{{f2.document.label}}:</div>
+                <div>{{f2.document}}</div>
+
+                <div>{{f3.name_of_Sdocument.label}}:</div>
+                <div>{{f3.name_of_Sdocument}}</div>
+                <div>{{f3.Sdocument.label}}:</div>
+                <div>{{f3.Sdocument}}</div>
+
+
+                <div>{{f4.afca_membership.label}}:</div>
+                <div>{{f4.afca_membership}}</div>
+                <div>{{f4.Aggregator_contractor.label}}:</div>
+                <div>{{f4.Aggregator_contractor}}</div>
+                <div>{{f4.Aggregator_ManagerName.label}}:</div>
+                <div>{{f4.Aggregator_ManagerName}}</div>
+                <div>{{f4.Aggregator_ManagerNumber.label}}:</div>
+                <div>{{f4.Aggregator_ManagerNumber}}</div>
+                <div>{{f4.ABN_Number.label}}:</div>
+                <div>{{f4.ABN_Number}}</div>
+                <div>{{f4.Diploma_certificate.label}}:</div>
+                <div>{{f4.Diploma_certificate}}</div><br>
+                <input type="submit" value="Create" />
+            </form> 
+            
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+{% endblock content %} {% block javascript %}
+<script>
+    $(function() {
+        $('#nav-home').addClass('active');
+    });
+</script>
+{% endblock javascript %}
+
