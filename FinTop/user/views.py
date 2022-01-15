@@ -610,14 +610,12 @@ class applyloan(View):
             print('===>', td)
             td_total_value = request.POST['td_total_value']
             try:
-                r = Kyc.objects.get(user=user)
-                if r.agentId=="":
-                    r = None
-                    Underprocess_loans.objects.create(loan_id=bn, agent=r).save()
-                else:
-                    pr = Profile.objects.get(pk=r.agentId)
-                    if pr.is_agent:
-                        Underprocess_loans.objects.create(loan_id=bn, agent=pr).save()
+                r = Referral.objects.get(user=user)
+                u =r.referred_by
+                pr = Profile.objects.get(user=u)
+                if pr.is_agent:
+                    Underprocess_loans.objects.create(loan_id=bn, agent=u).save()
+
             except Kyc.DoesNotExist:
                 r = ""
                 Underprocess_loans.objects.create(loan_id=bn, agent=r).save()
