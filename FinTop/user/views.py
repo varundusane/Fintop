@@ -129,8 +129,8 @@ def KycForm(request):
         if pr.is_bizpartner:
             return HttpResponse('Form for user who came by refer of customer')
 
-def login_user(request):
 
+def login_user(request):
     if request.user.is_authenticated:
         pr = Profile.objects.get(user=request.user)
         if pr.is_agent is False:
@@ -161,6 +161,8 @@ def login_user(request):
         context = {}
 
         return render(request, 'account/login.html', context)
+
+
 class SignUpView(View):
     form_class = SignUpForm
 
@@ -361,7 +363,7 @@ class SignUpVieww(View):
                         ph.insert(0, "6")
                         ph.insert(0, "+")
                         phnumber = ''.join(map(str, ph))
-                user.is_active = True # Deactivate account till it is confirmed
+                user.is_active = True  # Deactivate account till it is confirmed
                 user.save()
                 new_profile = Profile(
                     user=user, phnumber=phnumber, email_confirmed=False)
@@ -611,7 +613,7 @@ class applyloan(View):
             td_total_value = request.POST['td_total_value']
             try:
                 r = Referral.objects.get(user=user)
-                u =r.referred_by
+                u = r.referred_by
                 pr = Profile.objects.get(user=u)
                 if pr.is_agent:
                     Underprocess_loans.objects.create(loan_id=bn, agent=u).save()
