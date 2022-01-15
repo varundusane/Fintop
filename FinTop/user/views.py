@@ -616,7 +616,7 @@ class applyloan(View):
                 if pr.is_agent:
                     Underprocess_loans.objects.create(loan_id=bn, agent=u).save()
 
-            except Kyc.DoesNotExist:
+            except Referral.DoesNotExist:
                 r = ""
                 Underprocess_loans.objects.create(loan_id=bn, agent=r).save()
             # AdditionalAssets()
