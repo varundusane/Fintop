@@ -619,7 +619,7 @@ class applyloan(View):
                     Underprocess_loans.objects.create(loan_id=bn, agent=u).save()
 
             except Referral.DoesNotExist:
-                r = ""
+                r = None
                 Underprocess_loans.objects.create(loan_id=bn, agent=r).save()
             # AdditionalAssets()
         # table = Loan.objects.all().filter(user=user)
